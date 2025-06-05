@@ -1,6 +1,8 @@
 import node from '@astrojs/node'
+import tailwindcss from '@tailwindcss/vite'
 // @ts-check
 import { defineConfig } from 'astro/config'
+
 import { loadEnv } from 'vite'
 
 import './src/libs/init'
@@ -15,6 +17,8 @@ export default defineConfig({
     server: {
       allowedHosts: [APP_URL],
     },
+
+    plugins: [tailwindcss()],
   },
 
   adapter: node({
