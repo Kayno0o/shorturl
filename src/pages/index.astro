@@ -1,13 +1,13 @@
 ---
 import type { Link } from '../api/orm/entities/link'
 import { getUserFromJwt } from '../api/middleware/auth'
-import CreateLinkForm from '../components/CreateLinkForm.astro'
-import DashboardHeader from '../components/DashboardHeader.astro'
-import FeaturesGrid from '../components/FeaturesGrid.astro'
-import HeroSection from '../components/HeroSection.astro'
-import LinksGrid from '../components/LinksGrid.astro'
-import QuickStats from '../components/QuickStats.astro'
 import Layout from '../layouts/Layout.astro'
+import DashboardHeader from '../components/DashboardHeader.astro'
+import CreateLinkForm from '../components/CreateLinkForm.astro'
+import QuickStats from '../components/QuickStats.astro'
+import LinksGrid from '../components/LinksGrid.astro'
+import HeroSection from '../components/HeroSection.astro'
+import FeaturesGrid from '../components/FeaturesGrid.astro'
 
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
@@ -25,29 +25,31 @@ catch (e) {
   links = []
   console.error(linksRes.url, linksRes.status)
 }
+
+const totalClicks = links.reduce((sum, link) => sum + (link.clickCount || 0), 0)
 ---
 
 <Layout title="URL Shortener">
-  {user
-    ? (
-      <div class="space-y-8">
-        <DashboardHeader username={user.username} />
+  {user ? (
+    <div class="space-y-8">
+      <DashboardHeader username={user.username} />
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2">
-            <CreateLinkForm />
-          </div>
-
-          <QuickStats linkCount={links.length} />
+      <!-- Main Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2">
+          <CreateLinkForm />
         </div>
+        
+        <QuickStats linkCount={links.length} totalClicks={totalClicks} />
+      </div>
 
-        <LinksGrid links={links} shortUrl={import.meta.env.SHORT_URL} />
-      </div>
-    )
-    : (
-      <div class="max-w-4xl mx-auto">
-        <HeroSection />
-        <FeaturesGrid />
-      </div>
-    )}
+      <LinksGrid links={links} shortUrl={import.meta.env.SHORT_URL} />
+    </div>
+  ) : (
+    <!-- Unauthenticated Landing -->
+    <div class="max-w-4xl mx-auto">
+      <HeroSection />
+      <FeaturesGrid />
+    </div>
+  )}
 </Layout>

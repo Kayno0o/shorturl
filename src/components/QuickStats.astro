@@ -5,9 +5,10 @@ import Card from './Card.astro'
 
 export interface Props {
   linkCount: number
+  totalClicks: number
 }
 
-const { linkCount } = Astro.props
+const { linkCount, totalClicks } = Astro.props
 ---
 
 <div class="space-y-4">
@@ -17,6 +18,15 @@ const { linkCount } = Astro.props
     </div>
     <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
       Total Links
+    </div>
+  </Card>
+
+  <Card class="p-6 text-center">
+    <div class="text-3xl font-bold text-green-600 dark:text-green-400">
+      {totalClicks}
+    </div>
+    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+      Total Clicks
     </div>
   </Card>
 

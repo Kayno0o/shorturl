@@ -1,13 +1,14 @@
 ---
-import { Copy, ExternalLink, Trash2 } from '@lucide/astro'
+import { Copy, ExternalLink, Trash2, TrendingUp } from '@lucide/astro'
 
 export interface Props {
   code: string
   value: string
   shortUrl: string
+  clickCount: number
 }
 
-const { code, value, shortUrl } = Astro.props
+const { code, value, shortUrl, clickCount } = Astro.props
 const fullShortUrl = `https://${shortUrl}/${code}`
 ---
 
@@ -57,6 +58,15 @@ const fullShortUrl = `https://${shortUrl}/${code}`
       <div class="text-blue-600 dark:text-blue-400 truncate mt-1 font-medium">
         {fullShortUrl}
       </div>
+    </div>
+    <div class="text-sm flex items-center gap-2">
+      <span class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+        <TrendingUp size={14} />
+        Clicks:
+      </span>
+      <span class="text-gray-900 dark:text-gray-100 font-medium">
+        {clickCount.toLocaleString()}
+      </span>
     </div>
   </div>
 </div>

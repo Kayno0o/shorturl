@@ -23,6 +23,11 @@ const app = new Elysia()
     if (!link)
       return new Error('Link not found')
 
+    setImmediate(() => {
+      link.clickCount++
+      repo.update(link.id, link)
+    })
+
     return redirect(link.value)
   })
 

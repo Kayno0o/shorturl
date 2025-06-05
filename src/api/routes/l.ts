@@ -14,14 +14,6 @@ const linkController = new Elysia({ prefix: '/l' })
   }, {
     requireAuth: true,
   })
-  .get('/:code', ({ params: { code } }) => {
-    const repo = getRepository(Link.prototype)!
-    const link = repo.findOneBy({ where: { code } })
-    if (!link)
-      return new Error('Link not found')
-
-    return redirect(link.value)
-  })
   .post('/create', ({ body, auth }) => {
     const repo = getRepository(Link.prototype)!
     if (repo.findOneBy({ where: { code: body.code } }))
