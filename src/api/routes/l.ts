@@ -32,7 +32,10 @@ const linkController = new Elysia({ prefix: '/l' })
     return redirect('/')
   }, {
     body: t.Object({
-      code: t.Optional(t.String({ minLength: 3, maxLength: 16 })),
+      code: t.Union([
+        t.Literal(''),
+        t.String({ minLength: 3, maxLength: 32 }),
+      ]),
       value: t.String({ format: 'uri' }),
     }),
     requireAuth: true,
@@ -40,7 +43,7 @@ const linkController = new Elysia({ prefix: '/l' })
   .post('/delete/:code', ({ params: { code }, auth }) => {
     const repo = getRepository(Link.prototype)!
     const link = repo.findOneBy({ where: { code, owner: auth.user!.id } })
-    
+
     if (!link)
       return new Error('Link not found')
 

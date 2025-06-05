@@ -1,0 +1,77 @@
+---
+import { ArrowLeft } from '@lucide/astro'
+import Layout from '../layouts/Layout.astro'
+import Card from './Card.astro'
+
+export interface Props {
+  title: string
+  heading: string
+  description: string
+  formAction: string
+  submitText: string
+  alternativeText: string
+  alternativeLink: string
+  alternativeLinkText: string
+}
+
+const {
+  title,
+  heading,
+  description,
+  formAction,
+  submitText,
+  alternativeText,
+  alternativeLink,
+  alternativeLinkText,
+} = Astro.props
+---
+
+<Layout title={title}>
+  <div class="max-w-md mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold gradient-text mb-2">
+        {heading}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        {description}
+      </p>
+    </div>
+
+    <!-- Main Form -->
+    <Card class="p-8">
+      <form action={formAction} method="post" class="space-y-6">
+        <slot name="form-fields" />
+
+        <button type="submit" class="btn-primary w-full inline-flex items-center justify-center gap-2">
+          <slot name="submit-icon" />
+          {submitText}
+        </button>
+      </form>
+    </Card>
+
+    <!-- Alternative Action -->
+    <Card class="p-6 mt-6 text-center">
+      <p class="text-gray-600 dark:text-gray-400 mb-4">
+        {alternativeText}
+      </p>
+      <a href={alternativeLink}>
+        <button class="btn-secondary inline-flex items-center gap-2">
+          <slot name="alternative-icon" />
+          {alternativeLinkText}
+        </button>
+      </a>
+    </Card>
+
+    <!-- Back to Home -->
+    <div class="text-center mt-6">
+      <a
+        href="/"
+        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
+      >
+        <ArrowLeft size={16} class="mr-1" />
+        Back to Home
+      </a>
+    </div>
+  </div>
+</Layout>

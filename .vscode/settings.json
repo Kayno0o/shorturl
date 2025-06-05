@@ -81,5 +81,8 @@
     "tailwindcss",
     "postcss",
     "github-actions-workflow"
-  ]
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }

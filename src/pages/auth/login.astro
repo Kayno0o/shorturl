@@ -1,72 +1,38 @@
 ---
-import { ArrowLeft, LogIn, UserPlus } from '@lucide/astro'
-import Button from '../../components/Button.astro'
-import Card from '../../components/Card.astro'
+import { LogIn, UserPlus } from '@lucide/astro'
+import AuthLayout from '../../components/AuthLayout.astro'
 import Input from '../../components/Input.astro'
-import Layout from '../../layouts/Layout.astro'
 ---
 
-<Layout title="Sign In">
-  <div class="max-w-md mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold gradient-text mb-2">
-        Welcome Back
-      </h1>
-      <p class="text-gray-600 dark:text-gray-400">
-        Sign in to your account to continue
-      </p>
-    </div>
+<AuthLayout
+  title="Sign In"
+  heading="Welcome Back"
+  description="Sign in to your account to continue"
+  formAction="/api/auth/login"
+  submitText="Sign In"
+  alternativeText="Don't have an account yet?"
+  alternativeLink="/auth/register"
+  alternativeLinkText="Create Account"
+>
+  <LogIn size={16} slot="submit-icon" />
+  <UserPlus size={16} slot="alternative-icon" />
 
-    <!-- Login Form -->
-    <Card class="p-8">
-      <form action="/api/auth/login" method="post" class="space-y-6">
-        <Input
-          label="Username"
-          name="username"
-          required
-          placeholder="Enter your username"
-          autocomplete="username"
-        />
+  <Fragment slot="form-fields">
+    <Input
+      label="Username"
+      name="username"
+      required
+      placeholder="Enter your username"
+      autocomplete="username"
+    />
 
-        <Input
-          label="Password"
-          type="password"
-          name="password"
-          required
-          placeholder="Enter your password"
-          autocomplete="current-password"
-        />
-
-        <Button type="submit" class="w-full">
-          <LogIn size={16} />
-          Sign In
-        </Button>
-      </form>
-    </Card>
-
-    <!-- Sign Up Link -->
-    <Card class="p-6 mt-6 text-center">
-      <p class="text-gray-600 dark:text-gray-400 mb-4">
-        Don't have an account yet?
-      </p>
-      <a href="/auth/register">
-        <Button variant="secondary">
-          <UserPlus size={16} />
-          Create Account
-        </Button>
-      </a>
-    </Card>
-
-    <!-- Back to Home -->
-    <div class="text-center mt-6">
-      <a
-        href="/"
-        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
-      >
-        <ArrowLeft size={16} class="mr-1" />
-        Back to Home
-      </a>
-    </div>
-  </div>
-</Layout>
+    <Input
+      label="Password"
+      type="password"
+      name="password"
+      required
+      placeholder="Enter your password"
+      autocomplete="current-password"
+    />
+  </Fragment>
+</AuthLayout>

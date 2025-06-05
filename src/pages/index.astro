@@ -1,12 +1,13 @@
 ---
 import type { Link } from '../api/orm/entities/link'
 import { getUserFromJwt } from '../api/middleware/auth'
+import CreateLinkForm from '../components/CreateLinkForm.astro'
+import DashboardHeader from '../components/DashboardHeader.astro'
+import FeaturesGrid from '../components/FeaturesGrid.astro'
+import HeroSection from '../components/HeroSection.astro'
+import LinksGrid from '../components/LinksGrid.astro'
+import QuickStats from '../components/QuickStats.astro'
 import Layout from '../layouts/Layout.astro'
-import Button from '../components/Button.astro'
-import Card from '../components/Card.astro'
-import Input from '../components/Input.astro'
-import LinkCard from '../components/LinkCard.astro'
-import { Plus, Link as LinkIcon,  Shield, LogOut } from '@lucide/astro'
 
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
@@ -27,166 +28,26 @@ catch (e) {
 ---
 
 <Layout title="URL Shortener">
-  {user ? (
-    <!-- Authenticated Dashboard -->
-    <div class="space-y-8">
-      <!-- Header Section -->
-      <Card class="p-8 text-center">
-        <h1 class="text-4xl font-bold gradient-text mb-3">
-          URL Shortener
-        </h1>
-        <p class="text-gray-600 dark:text-gray-400 text-lg">
-          Welcome back, <span class="font-semibold text-blue-600 dark:text-blue-400">{user.username}</span>
-        </p>
-      </Card>
+  {user
+    ? (
+      <div class="space-y-8">
+        <DashboardHeader username={user.username} />
 
-      <!-- Main Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Create Link Form -->
-        <div class="lg:col-span-2">
-          <Card class="p-6">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-              Create New Link
-            </h2>
-            
-            <form action="/api/l/create" method="post" class="space-y-4">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Short Code"
-                  name="code"
-                  required
-                  placeholder="my-custom-link"
-                />
-                <Input
-                  label="Target URL"
-                  type="url"
-                  name="value"
-                  required
-                  placeholder="https://example.com"
-                />
-              </div>
-              <Button type="submit" class="w-full md:w-auto">
-                <Plus size={16} />
-                Create Short Link
-              </Button>
-            </form>
-          </Card>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2">
+            <CreateLinkForm />
+          </div>
+
+          <QuickStats linkCount={links.length} />
         </div>
 
-        <!-- Quick Stats -->
-        <div class="space-y-4">
-          <Card class="p-6 text-center">
-            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {links.length}
-            </div>
-            <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Total Links
-            </div>
-          </Card>
-          
-          <Card class="p-4">
-            <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-3">Quick Actions</h3>
-            <div class="space-y-2">
-              <a href="/api/auth/logout">
-                <Button variant="ghost" size="sm" class="w-full justify-start text-red-600 dark:text-red-400">
-                  <LogOut size={16} />
-                  Sign Out
-                </Button>
-              </a>
-            </div>
-          </Card>
-        </div>
+        <LinksGrid links={links} shortUrl={import.meta.env.SHORT_URL} />
       </div>
-
-      <!-- Links Grid -->
-      {links.length > 0 && (
-        <Card class="p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              Your Links
-            </h2>
-            <span class="text-sm text-gray-500 dark:text-gray-400">
-              {links.length} total
-            </span>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {links.map(link => (
-              <LinkCard 
-                code={link.code}
-                value={link.value}
-                shortUrl={import.meta.env.SHORT_URL}
-              />
-            ))}
-          </div>
-        </Card>
-      )}
-    </div>
-  ) : (
-    <!-- Unauthenticated Landing -->
-    <div class="max-w-4xl mx-auto">
-      <!-- Hero Section -->
-      <Card class="p-12 text-center mb-8">
-        <h1 class="text-5xl font-bold gradient-text mb-6">
-          Professional URL Shortener
-        </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-          Create clean, memorable short links for your URLs with advanced analytics and custom branding.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/auth/register">
-            <Button>
-              <Plus size={16} />
-              Get Started
-            </Button>
-          </a>
-          <a href="/auth/login">
-            <Button variant="secondary">
-              Sign In
-            </Button>
-          </a>
-        </div>
-      </Card>
-
-      <!-- Features Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card variant="hover" class="p-6 text-center">
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <LinkIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Custom Links
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400 text-sm">
-            Create memorable, branded short links with custom codes
-          </p>
-        </Card>
-
-        <Card variant="hover" class="p-6 text-center">
-          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <BarChart3 class="w-6 h-6 text-green-600 dark:text-green-400" />
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Analytics
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400 text-sm">
-            Track clicks and monitor performance of your links
-          </p>
-        </Card>
-
-        <Card variant="hover" class="p-6 text-center">
-          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Shield class="w-6 h-6 text-purple-600 dark:text-purple-400" />
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Secure
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400 text-sm">
-            Enterprise-grade security for your links and data
-          </p>
-        </Card>
+    )
+    : (
+      <div class="max-w-4xl mx-auto">
+        <HeroSection />
+        <FeaturesGrid />
       </div>
-    </div>
-  )}
+    )}
 </Layout>

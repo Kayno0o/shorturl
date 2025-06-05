@@ -1,78 +1,44 @@
 ---
-import { ArrowLeft, LogIn, UserPlus } from '@lucide/astro'
-import Button from '../../components/Button.astro'
-import Card from '../../components/Card.astro'
+import { LogIn, UserPlus } from '@lucide/astro'
+import AuthLayout from '../../components/AuthLayout.astro'
 import Input from '../../components/Input.astro'
-import Layout from '../../layouts/Layout.astro'
 ---
 
-<Layout title="Create Account">
-  <div class="max-w-md mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold gradient-text mb-2">
-        Create Account
-      </h1>
-      <p class="text-gray-600 dark:text-gray-400">
-        Join to start creating professional short links
-      </p>
-    </div>
+<AuthLayout
+  title="Create Account"
+  heading="Create Account"
+  description="Join to start creating professional short links"
+  formAction="/api/auth/register"
+  submitText="Create Account"
+  alternativeText="Already have an account?"
+  alternativeLink="/auth/login"
+  alternativeLinkText="Sign In"
+>
+  <UserPlus size={16} slot="submit-icon" />
+  <LogIn size={16} slot="alternative-icon" />
 
-    <!-- Registration Form -->
-    <Card class="p-8">
-      <form action="/api/auth/register" method="post" class="space-y-6">
-        <Input
-          label="Username"
-          name="username"
-          required
-          placeholder="Choose a username (2-16 characters)"
-          autocomplete="username"
-          minlength={2}
-          maxlength={16}
-          help="2-16 characters, letters and numbers only"
-        />
+  <Fragment slot="form-fields">
+    <Input
+      label="Username"
+      name="username"
+      required
+      placeholder="Choose a username (2-16 characters)"
+      autocomplete="username"
+      minlength={2}
+      maxlength={16}
+      help="2-16 characters, letters and numbers only"
+    />
 
-        <Input
-          label="Password"
-          type="password"
-          name="password"
-          required
-          placeholder="Create a secure password"
-          autocomplete="new-password"
-          minlength={6}
-          maxlength={48}
-          help="At least 6 characters with uppercase, lowercase, number, and special character (!.-_), or 24+ characters"
-        />
-
-        <Button type="submit" class="w-full">
-          <UserPlus size={16} />
-          Create Account
-        </Button>
-      </form>
-    </Card>
-
-    <!-- Sign In Link -->
-    <Card class="p-6 mt-6 text-center">
-      <p class="text-gray-600 dark:text-gray-400 mb-4">
-        Already have an account?
-      </p>
-      <a href="/auth/login">
-        <Button variant="secondary">
-          <LogIn size={16} />
-          Sign In
-        </Button>
-      </a>
-    </Card>
-
-    <!-- Back to Home -->
-    <div class="text-center mt-6">
-      <a
-        href="/"
-        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
-      >
-        <ArrowLeft size={16} class="mr-1" />
-        Back to Home
-      </a>
-    </div>
-  </div>
-</Layout>
+    <Input
+      label="Password"
+      type="password"
+      name="password"
+      required
+      placeholder="Create a secure password"
+      autocomplete="new-password"
+      minlength={6}
+      maxlength={48}
+      help="At least 6 characters with uppercase, lowercase, number, and special character (!.-_), or 24+ characters"
+    />
+  </Fragment>
+</AuthLayout>

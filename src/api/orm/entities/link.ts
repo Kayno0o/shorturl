@@ -11,6 +11,9 @@ export class Link extends AbstractEntity {
   @Column('int', { nullable: false, reference: { key: 'id', table: 'user' } })
   owner: number
 
+  @Column('int', { nullable: false, default: 0 })
+  clickCount = 0
+
   constructor(data: { code: string, value: string, owner: number }) {
     super()
 
