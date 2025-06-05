@@ -1,9 +1,9 @@
+import node from '@astrojs/node'
 // @ts-check
 import { defineConfig } from 'astro/config'
-
 import { loadEnv } from 'vite'
 
-import node from '@astrojs/node';
+import './src/libs/init'
 
 const { APP_URL } = loadEnv(String(process.env.NODE_ENV), process.cwd(), '')
 

@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+
+---
+
+<Layout title="Register">
+  <form action="/api/auth/register" method="post">
+    <h2>Register</h2>
+    <label>
+      Username
+      <input type="text" name="username" >
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" >
+    </label>
+
+    <button type="submit">Confirm</button>
+  </form>
+</Layout>

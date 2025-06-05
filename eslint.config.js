@@ -1,3 +1,3 @@
-import { typescript } from '@kaynooo/eslint'
+import { astro } from '@kaynooo/eslint'
 
-export default typescript()
+export default astro()

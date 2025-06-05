@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+
+---
+
+<Layout title="Login">
+  <form action="/api/auth/login" method="post">
+    <h2>Login</h2>
+    <label>
+      Username
+      <input type="text" name="username" >
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" >
+    </label>
+
+    <button type="submit">Confirm</button>
+  </form>
+</Layout>

@@ -1,16 +1,51 @@
 ---
+import type { Link } from '../api/orm/entities/link'
+import { getUserFromJwt } from '../api/middleware/auth'
+import Layout from '../layouts/Layout.astro'
 
+const cookies = Astro.cookies
+const user = getUserFromJwt(cookies.get('jwtToken')?.value)
+
+const linksRes = await fetch(new URL('/api/l', `https://${import.meta.env.APP_URL}`), {
+  headers: {
+    Cookie: Astro.request.headers.get('cookie') || '',
+  },
+})
+let links: Link[]
+try {
+  links = await linksRes.json()
+}
+catch (e) {
+  links = []
+  console.error(linksRes.url, linksRes.status)
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="URL Shortener">
+  <h1>Astro</h1>
+
+  {user
+    ? (
+      <span>Welcome {user.username}!</span>
+
+      <form action="/api/l/create" method="post">
+        <label>
+          Name
+          <input type="text" name="code" required>
+        </label>
+        <label>
+          URL
+          <input type="url" name="value" required>
+        </label>
+        <button type="submit">Create</button>
+      </form>
+
+      <ul>
+        {links.map(link => (<li><pre>{link.code}</pre> <a href={link.value}>{link.value}</a> / </li>))}
+      </ul>
+    )
+    : (
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+    )}
+</Layout>
