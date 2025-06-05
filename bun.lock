@@ -7,6 +7,7 @@
         "@astrojs/node": "^9.2.2",
         "@kaynooo/ts-module": "^1.0.14",
         "@kaynooo/utils": "^1.2.15",
+        "@lucide/astro": "^0.513.0",
         "@tailwindcss/vite": "^4.1.8",
         "astro": "^5.8.2",
         "elysia": "^1.3.4",
@@ -214,6 +215,8 @@
     "@kaynooo/ts-module": ["@kaynooo/ts-module@1.0.14", "", { "dependencies": { "@kaynooo/utils": "^1.2.15", "prismarine-nbt": "^2.7.0", "rcon-client": "^4.2.5", "tsup": "^8.5.0" }, "peerDependencies": { "typescript": "^5.8.3" } }, "sha512-G6aKl9HNWl6+WR0kf2HrAWV/C6g3a5mUrMinWKrKNxCbRHNSKMC5l6dz5DHzz9ejO2mvlr1tQT9JfguAc0VgvA=="],
 
     "@kaynooo/utils": ["@kaynooo/utils@1.2.15", "", { "peerDependencies": { "dayjs": "^1.11.13", "typescript": "^5.0.0" } }, "sha512-rSqWbYBD3zN+DZR2zlUchHkhxqUF8qYnISUBxdRa3nuv5EU/dma1PVhJT1Si2bESu+XkUBFgQgmEIGx/cGqn4g=="],
+
+    "@lucide/astro": ["@lucide/astro@0.513.0", "", { "peerDependencies": { "astro": "^4 || ^5" } }, "sha512-UFXmRjELW8q/Npc0Yfm5Oqer+kPnetbPK39vJ7LcsfHtMCZx2gZG/YNMnjHDhk2QHScClgo8RmQrf8xQZG99dA=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@0.2.10", "", { "dependencies": { "@emnapi/core": "^1.4.3", "@emnapi/runtime": "^1.4.3", "@tybys/wasm-util": "^0.9.0" } }, "sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ=="],
 

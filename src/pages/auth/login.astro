@@ -1,59 +1,72 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import { ArrowLeft, LogIn, UserPlus } from '@lucide/astro'
+import Button from '../../components/Button.astro'
+import Card from '../../components/Card.astro'
+import Input from '../../components/Input.astro'
+import Layout from '../../layouts/Layout.astro'
 ---
 
-<Layout title="Login">
-  <div class="backdrop-blur-lg bg-white/10 dark:bg-white/5 rounded-3xl shadow-2xl border border-white/20 p-8">
+<Layout title="Sign In">
+  <div class="max-w-md mx-auto">
+    <!-- Header -->
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+      <h1 class="text-3xl font-bold gradient-text mb-2">
         Welcome Back
-      </h2>
-      <p class="text-gray-600 dark:text-gray-300">Sign in to your account</p>
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Sign in to your account to continue
+      </p>
     </div>
 
-    <form action="/api/auth/login" method="post" class="space-y-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Username
-        </label>
-        <input
-          type="text"
+    <!-- Login Form -->
+    <Card class="p-8">
+      <form action="/api/auth/login" method="post" class="space-y-6">
+        <Input
+          label="Username"
           name="username"
           required
-          class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-white/30 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400"
-          placeholder="Enter your username">
-      </div>
+          placeholder="Enter your username"
+          autocomplete="username"
+        />
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Password
-        </label>
-        <input
+        <Input
+          label="Password"
           type="password"
           name="password"
           required
-          class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-white/30 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400"
-          placeholder="Enter your password">
-      </div>
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        />
 
-      <button
-        type="submit"
-        class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold hover:from-indigo-600 hover:to-purple-700 transform hover:scale-[1.02] transition-all shadow-lg hover:shadow-xl"
-      >
-        Sign In
-      </button>
-    </form>
+        <Button type="submit" class="w-full">
+          <LogIn size={16} />
+          Sign In
+        </Button>
+      </form>
+    </Card>
 
-    <div class="mt-6 text-center">
-      <p class="text-gray-600 dark:text-gray-300">
-        Don't have an account?
-        <a
-          href="/auth/register"
-          class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors"
-        >
-          Sign up
-        </a>
+    <!-- Sign Up Link -->
+    <Card class="p-6 mt-6 text-center">
+      <p class="text-gray-600 dark:text-gray-400 mb-4">
+        Don't have an account yet?
       </p>
+      <a href="/auth/register">
+        <Button variant="secondary">
+          <UserPlus size={16} />
+          Create Account
+        </Button>
+      </a>
+    </Card>
+
+    <!-- Back to Home -->
+    <div class="text-center mt-6">
+      <a
+        href="/"
+        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
+      >
+        <ArrowLeft size={16} class="mr-1" />
+        Back to Home
+      </a>
     </div>
   </div>
 </Layout>

@@ -1,0 +1,26 @@
+---
+export interface Props {
+  variant?: 'default' | 'hover' | 'interactive'
+  class?: string
+  [key: string]: any
+}
+
+const {
+  variant = 'default',
+  class: className = '',
+  ...props
+} = Astro.props
+
+const baseClasses = 'bento-card'
+const variants = {
+  default: '',
+  hover: 'bento-card-hover',
+  interactive: 'bento-card-interactive',
+}
+
+const classes = `${baseClasses} ${variants[variant]} ${className}`
+---
+
+<div class={classes} {...props}>
+  <slot />
+</div>
