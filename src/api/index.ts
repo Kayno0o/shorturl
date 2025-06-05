@@ -10,10 +10,12 @@ const port = portIndex !== -1 && args[portIndex + 1] ? Number(args[portIndex + 1
 
 await initORM()
 
-const app = new Elysia({ prefix: '/api' })
+const app = new Elysia()
   .use(authService)
   .use(linkRoutes)
-  .use(authRoutes)
+  .group('/api', app => app
+    .use(linkRoutes)
+    .use(authRoutes))
 
 app.listen(port)
 

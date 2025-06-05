@@ -41,7 +41,7 @@ catch (e) {
       </form>
 
       <ul>
-        {links.map(link => (<li><pre>{link.code}</pre> <a href={link.value}>{link.value}</a> / </li>))}
+        {links.map(link => (<li><pre>{link.code}</pre> <a href={link.value}>{link.value}</a> / <a href={`https://${import.meta.env.SHORT_URL}/${link.code}`}>{`https://${import.meta.env.SHORT_URL}/${link.code}`}</a></li>))}
       </ul>
     )
     : (
