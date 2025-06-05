@@ -1,21 +1,59 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-
 ---
 
 <Layout title="Login">
-  <form action="/api/auth/login" method="post">
-    <h2>Login</h2>
-    <label>
-      Username
-      <input type="text" name="username" >
-    </label>
-    <label>
-      Password
-      <input type="password" name="password" >
-    </label>
+  <div class="backdrop-blur-lg bg-white/10 dark:bg-white/5 rounded-3xl shadow-2xl border border-white/20 p-8">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        Welcome Back
+      </h2>
+      <p class="text-gray-600 dark:text-gray-300">Sign in to your account</p>
+    </div>
 
-    <button type="submit">Confirm</button>
-  </form>
+    <form action="/api/auth/login" method="post" class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Username
+        </label>
+        <input
+          type="text"
+          name="username"
+          required
+          class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-white/30 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400"
+          placeholder="Enter your username">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          required
+          class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-white/30 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400"
+          placeholder="Enter your password">
+      </div>
+
+      <button
+        type="submit"
+        class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold hover:from-indigo-600 hover:to-purple-700 transform hover:scale-[1.02] transition-all shadow-lg hover:shadow-xl"
+      >
+        Sign In
+      </button>
+    </form>
+
+    <div class="mt-6 text-center">
+      <p class="text-gray-600 dark:text-gray-300">
+        Don't have an account?
+        <a
+          href="/auth/register"
+          class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors"
+        >
+          Sign up
+        </a>
+      </p>
+    </div>
+  </div>
 </Layout>
