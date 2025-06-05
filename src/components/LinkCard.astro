@@ -1,5 +1,5 @@
 ---
-import { Copy, ExternalLink, Trash2, TrendingUp } from '@lucide/astro'
+import { Copy, Edit, ExternalLink, Trash2, TrendingUp } from '@lucide/astro'
 
 export interface Props {
   code: string
@@ -9,7 +9,7 @@ export interface Props {
 }
 
 const { code, value, shortUrl, clickCount } = Astro.props
-const fullShortUrl = `https://${shortUrl}/${code}`
+const fullShortUrl = `https://${shortUrl}/${encodeURIComponent(code)}`
 ---
 
 <div class="bento-card bento-card-hover p-5">
@@ -25,6 +25,13 @@ const fullShortUrl = `https://${shortUrl}/${code}`
       >
         <Copy size={16} />
       </button>
+      <a
+        href={`/edit/${code}`}
+        class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 p-1 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+        title="Edit link"
+      >
+        <Edit size={16} />
+      </a>
       <a
         href={value}
         target="_blank"

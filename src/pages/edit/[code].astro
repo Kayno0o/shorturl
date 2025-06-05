@@ -1,0 +1,97 @@
+---
+import type { Link } from '../../api/orm/entities/link'
+import { ArrowLeft } from '@lucide/astro'
+import { getUserFromJwt } from '../../api/middleware/auth'
+import Card from '../../components/Card.astro'
+import EditLinkForm from '../../components/EditLinkForm.astro'
+import Layout from '../../layouts/Layout.astro'
+
+const { code } = Astro.params
+const cookies = Astro.cookies
+const user = getUserFromJwt(cookies.get('jwtToken')?.value)
+
+// Redirect to login if not authenticated
+if (!user) {
+  return Astro.redirect('/auth/login')
+}
+
+// Fetch all user links to find the specific one
+const linksRes = await fetch(new URL('/api/l', `https://${import.meta.env.APP_URL}`), {
+  headers: {
+    Cookie: Astro.request.headers.get('cookie') || '',
+  },
+})
+
+let links: Link[] = []
+let link: Link | undefined
+
+try {
+  links = await linksRes.json()
+  link = links.find(l => l.code === code)
+}
+catch (e) {
+  console.error('Failed to fetch links:', e)
+}
+
+// If link not found or doesn't belong to user, show error
+if (!link) {
+  return Astro.redirect('/')
+}
+---
+
+<Layout title={`Edit Link - ${code}`}>
+  <div class="max-w-2xl mx-auto space-y-6">
+    <!-- Header -->
+    <Card class="p-6 text-center">
+      <h1 class="text-3xl font-bold gradient-text mb-2">
+        Edit Link
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Update your short link settings
+      </p>
+    </Card>
+
+    <!-- Edit Form -->
+    <EditLinkForm
+      code={link.code}
+      value={link.value}
+      originalCode={link.code}
+    />
+
+    <!-- Current Stats -->
+    <Card class="p-6">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        Current Statistics
+      </h3>
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div>
+          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            {link.clickCount}
+          </div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Total Clicks
+          </div>
+        </div>
+        <div>
+          <div class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            {link.code}
+          </div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Short Code
+          </div>
+        </div>
+      </div>
+    </Card>
+
+    <!-- Back Navigation -->
+    <div class="text-center">
+      <a
+        href="/"
+        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
+      >
+        <ArrowLeft size={16} class="mr-1" />
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+</Layout>

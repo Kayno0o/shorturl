@@ -44,5 +44,24 @@ const linkController = new Elysia({ prefix: '/l' })
   }, {
     requireAuth: true,
   })
+  .post('/update/:code', ({ body: { code, value }, params: { code: originalCode }, auth }) => {
+    const repo = getRepository(Link.prototype)!
+    const link = repo.findOneBy({ where: { code: originalCode, owner: auth.user!.id } })
+
+    if (!link)
+      return new Error('Link not found')
+
+    link.code = code
+    link.value = value
+
+    repo.update(link.id, link)
+    return redirect('/')
+  }, {
+    body: t.Object({
+      code: t.String({ minLength: 3, maxLength: 32 }),
+      value: t.String({ format: 'uri' }),
+    }),
+    requireAuth: true,
+  })
 
 export default linkController
