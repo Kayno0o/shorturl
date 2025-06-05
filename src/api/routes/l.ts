@@ -37,5 +37,17 @@ const linkController = new Elysia({ prefix: '/l' })
     }),
     requireAuth: true,
   })
+  .post('/delete/:code', ({ params: { code }, auth }) => {
+    const repo = getRepository(Link.prototype)!
+    const link = repo.findOneBy({ where: { code, owner: auth.user!.id } })
+    
+    if (!link)
+      return new Error('Link not found')
+
+    repo.delete(link.id)
+    return redirect('/')
+  }, {
+    requireAuth: true,
+  })
 
 export default linkController
