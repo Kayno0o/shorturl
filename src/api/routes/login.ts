@@ -112,5 +112,10 @@ const authController = new Elysia({ prefix: '/auth' })
       password: t.String({ minLength: 6, maxLength: 48 }),
     }),
   })
+  .get('/logout', ({ cookie: { jwtToken } }) => {
+    jwtToken.remove()
+
+    return redirect('/')
+  })
 
 export default authController
