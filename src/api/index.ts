@@ -3,8 +3,8 @@ import { Elysia, redirect } from 'elysia'
 import { authService } from './middleware/auth'
 import { initORM } from './orm'
 import { Link } from './orm/entities/link'
-import linkRoutes from './routes/l'
-import authRoutes from './routes/login'
+import authRoutes from './routes/auth'
+import linkRoutes from './routes/link'
 
 const args = process.argv.slice(2)
 const portIndex = args.indexOf('--port')

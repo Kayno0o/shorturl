@@ -1,0 +1,36 @@
+---
+import { getUserFromJwt } from '../../../api/middleware/auth'
+import { getMfaUrl } from '../../../api/utils/mfa'
+import Button from '../../../components/Button.astro'
+import Input from '../../../components/Input.astro'
+import Layout from '../../../layouts/Layout.astro'
+
+const cookies = Astro.cookies
+const user = getUserFromJwt(cookies.get('jwtToken')?.value)
+if (!user)
+  return Astro.redirect('/')
+
+
+const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mfaToken')!.value)
+---
+
+<Layout title="Enable MFA">
+  <canvas data-url={url} id="qrcode"></canvas>
+  <form action="/api/auth/mfa/enable" method="post">
+    <Input label="Digits" type="text" name="digits" />
+    <Button type="submit">confirm</Button>
+  </form>
+</Layout>
+
+<script>
+import QRCode from 'qrcode'
+
+const canvas = document.getElementById('qrcode')!
+const url = String(canvas.dataset.url)
+
+QRCode.toCanvas(canvas, url, (error) => {
+  if (error)
+    console.error(error)
+  console.log('success!')
+})
+</script>

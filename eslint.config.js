@@ -1,3 +1,7 @@
 import { astro } from '@kaynooo/eslint'
 
-export default astro()
+export default astro({}, {
+  rules: {
+    camelcase: 'off',
+  },
+})

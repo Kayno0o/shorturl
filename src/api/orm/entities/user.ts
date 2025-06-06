@@ -8,6 +8,9 @@ export class User extends AbstractEntity {
   @Column('text', { nullable: false, unique: false })
   password: string
 
+  @Column('text', { nullable: true, unique: false })
+  mfa_token: string | null = null
+
   constructor(data: { username: string, hashedPassword: string }) {
     super()
 

@@ -1,15 +1,17 @@
+import type { StringValue } from 'ms'
 import { getRepository } from '@kaynooo/ts-module'
 import { comparePasswords, hashPassword, stringToMsDuration } from '@kaynooo/utils'
 import { Elysia, redirect, t } from 'elysia'
 import jwt from 'jsonwebtoken'
+import { authService, getUserFromJwt } from '../middleware/auth'
 import { User } from '../orm/entities/user'
+import { checkMfa, generateMfaSecret } from '../utils/mfa'
 
 // Configuration
 function getAuthConfig() {
   return {
     jwtSecret: import.meta.env.JWT_SECRET,
     jwtExpiration: import.meta.env.JWT_EXPIRATION ?? '1h',
-    isProduction: import.meta.env.NODE_ENV === 'production',
   }
 }
 
@@ -31,8 +33,8 @@ function validatePassword(password: string): string | null {
 }
 
 // JWT and cookie utilities
-function createTokenAndSetCookie(userId: number, jwtToken: any) {
-  const { jwtSecret, jwtExpiration, isProduction } = getAuthConfig()
+function createTokenAndSetCookie(userId: number, jwtToken: any, jwtExpiration: StringValue = '1h') {
+  const { jwtSecret } = getAuthConfig()
 
   const maxAge = stringToMsDuration(jwtExpiration)
   const expires = new Date(Date.now() + maxAge)
@@ -40,10 +42,10 @@ function createTokenAndSetCookie(userId: number, jwtToken: any) {
 
   jwtToken.value = token
   jwtToken.httpOnly = true
-  jwtToken.secure = isProduction
+  jwtToken.secure = true
   jwtToken.sameSite = 'strict'
   jwtToken.expires = expires
-  jwtToken.maxAge = Math.floor(maxAge / 1000) // Convert to seconds
+  jwtToken.maxAge = Math.floor(maxAge / 1000)
 }
 
 // Auth service
@@ -78,19 +80,72 @@ class AuthService {
   }
 }
 
-const authService = new AuthService()
+const service = new AuthService()
 
-// Controller
 const authController = new Elysia({ prefix: '/auth' })
-  .post('/login', async ({ body, cookie: { jwtToken } }) => {
-    try {
-      const user = await authService.login(body.username, body.password)
-      createTokenAndSetCookie(user.id, jwtToken)
+  .use(authService)
+  .get('/mfa/create', ({ cookie: { mfaToken } }) => {
+    const maxAge = stringToMsDuration('3m')
+    const expires = new Date(Date.now() + maxAge)
+
+    mfaToken.value = generateMfaSecret()
+    mfaToken.httpOnly = true
+    mfaToken.secure = true
+    mfaToken.sameSite = 'strict'
+    mfaToken.maxAge = maxAge
+    mfaToken.expires = expires
+
+    return redirect('/auth/mfa/enable')
+  }, {
+    requireAuth: true,
+  })
+  .post('/mfa/enable', ({ cookie: { mfaToken }, body: { digits }, auth }) => {
+    if (!mfaToken.value || !checkMfa(digits, mfaToken.value))
+      return redirect('/auth/mfa/enable')
+
+    const user = auth.user!
+    const repo = getRepository(User.prototype)!
+
+    user.mfa_token = mfaToken.value
+    repo.update(user.id, user)
+
+    return redirect('/')
+  }, {
+    body: t.Object({
+      digits: t.String({ minLength: 6, maxLength: 6 }),
+    }),
+    requireAuth: true,
+  })
+  .post('/mfa/validate', ({ cookie: { pendingMfaToken, jwtToken }, body: { digits } }) => {
+    const user = getUserFromJwt(pendingMfaToken.value)
+    if (!user)
+      return redirect('/login')
+    if (!user.mfa_token)
       return redirect('/')
+
+    if (!checkMfa(digits, user.mfa_token))
+      return redirect('/auth/mfa/validate')
+
+    pendingMfaToken.remove()
+
+    createTokenAndSetCookie(user.id, jwtToken)
+
+    return redirect('/')
+  }, {
+    body: t.Object({
+      digits: t.String({ minLength: 6, maxLength: 6 }),
+    }),
+  })
+  .post('/login', async ({ body, cookie: { jwtToken, pendingMfaToken } }) => {
+    const user = await service.login(body.username, body.password)
+
+    if (user.mfa_token) {
+      createTokenAndSetCookie(user.id, pendingMfaToken, '5m')
+      return redirect('/auth/mfa/validate')
     }
-    catch (error) {
-      return new Error(error instanceof Error ? error.message : 'Login failed')
-    }
+
+    createTokenAndSetCookie(user.id, jwtToken)
+    return redirect('/')
   }, {
     body: t.Object({
       username: t.String({ minLength: 2, maxLength: 16 }),
@@ -99,7 +154,7 @@ const authController = new Elysia({ prefix: '/auth' })
   })
   .post('/register', async ({ body, cookie: { jwtToken } }) => {
     try {
-      const user = await authService.register(body.username, body.password)
+      const user = await service.register(body.username, body.password)
       createTokenAndSetCookie(user.id, jwtToken)
       return redirect('/')
     }
