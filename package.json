@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "bunx --bun astro dev --port 4192 --host 127.0.0.1",
     "build": "bunx --bun astro build --port 4192 --host 127.0.0.1",
-    "preview": "bunx --bun astro preview --port 4192 --host 127.0.0.1",
+    "preview": "DEBUG_DB=false bunx --bun astro preview --port 4192 --host 127.0.0.1",
     "astro": "bunx --bun astro",
     "api:dev": "bun run --watch ./src/api/index.ts --port 4193",
+    "api:start": "DEBUG_DB=false bun run ./src/api/index.ts --port 4193",
     "lint:fix": "bunx --bun eslint --fix"
   },
   "dependencies": {
