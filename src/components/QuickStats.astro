@@ -1,4 +1,5 @@
 ---
+import type { User } from '../api/orm/entities/user'
 import { LogOut } from '@lucide/astro'
 import Button from './Button.astro'
 import Card from './Card.astro'
@@ -6,9 +7,10 @@ import Card from './Card.astro'
 export interface Props {
   linkCount: number
   totalClicks: number
+  user: User
 }
 
-const { linkCount, totalClicks } = Astro.props
+const { linkCount, totalClicks, user } = Astro.props
 ---
 
 <div class="space-y-4">
@@ -39,6 +41,14 @@ const { linkCount, totalClicks } = Astro.props
           Sign Out
         </Button>
       </a>
+      {!user.mfa_token && (
+        <a href="/api/auth/mfa/enable">
+          <Button variant="ghost" size="sm" class="w-full justify-start text-purple-600 dark:text-purple-400">
+            <LogOut size={16} />
+            Enable MFA
+          </Button>
+        </a>
+      )}
     </div>
   </Card>
 </div>

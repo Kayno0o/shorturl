@@ -40,7 +40,7 @@ const totalClicks = links.reduce((sum, link) => sum + (link.clickCount || 0), 0)
             <CreateLinkForm />
           </div>
 
-          <QuickStats linkCount={links.length} totalClicks={totalClicks} />
+          <QuickStats linkCount={links.length} totalClicks={totalClicks} user={user} />
         </div>
 
         <LinksGrid links={links} shortUrl={import.meta.env.SHORT_URL} />
