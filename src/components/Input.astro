@@ -4,6 +4,7 @@ export interface Props {
   error?: string
   help?: string
   class?: string
+  id?: string
   [key: string]: any
 }
 
@@ -12,29 +13,41 @@ const {
   error,
   help,
   class: className = '',
+  id = `input-${Math.random().toString(36).substr(2, 9)}`,
   ...props
 } = Astro.props
 
 const inputClasses = `input-field text-black dark:text-white ${error ? 'border-red-500 dark:text-white focus:border-red-500 focus:ring-red-500/20' : ''} ${className}`
+const hasError = Boolean(error)
+const errorId = hasError ? `${id}-error` : undefined
+const helpId = help ? `${id}-help` : undefined
+const describedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined
 ---
 
 <div>
   {label && (
-    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+    <label for={id} class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
       {label}
+      {props.required && <span class="text-red-500" aria-label="required">*</span>}
     </label>
   )}
 
-  <input class={inputClasses} {...props} />
+  <input
+    id={id}
+    class={inputClasses}
+    aria-invalid={hasError}
+    aria-describedby={describedBy}
+    {...props}
+  />
 
   {help && (
-    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+    <p id={helpId} class="text-xs text-gray-500 dark:text-gray-400 mt-1">
       {help}
     </p>
   )}
 
   {error && (
-    <p class="text-xs text-red-600 dark:text-red-400 mt-1">
+    <p id={errorId} class="text-xs text-red-600 dark:text-red-400 mt-1" role="alert">
       {error}
     </p>
   )}

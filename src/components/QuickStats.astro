@@ -1,7 +1,6 @@
 ---
 import type { User } from '../api/orm/entities/user'
-import { LogOut } from '@lucide/astro'
-import Button from './Button.astro'
+import { LogOut, Shield } from '@lucide/astro'
 import Card from './Card.astro'
 
 export interface Props {
@@ -13,7 +12,7 @@ export interface Props {
 const { linkCount, totalClicks, user } = Astro.props
 ---
 
-<div class="space-y-4">
+<aside aria-label="Quick statistics and actions" class="space-y-4">
   <Card class="p-6 text-center">
     <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
       {linkCount}
@@ -34,21 +33,29 @@ const { linkCount, totalClicks, user } = Astro.props
 
   <Card class="p-4">
     <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-3">Quick Actions</h3>
-    <div class="space-y-2">
-      <a href="/api/auth/logout">
-        <Button variant="ghost" size="sm" class="w-full justify-start text-red-600 dark:text-red-400">
-          <LogOut size={16} />
-          Sign Out
-        </Button>
-      </a>
-      {!user.mfa_token && (
-        <a href="/api/auth/mfa/enable">
-          <Button variant="ghost" size="sm" class="w-full justify-start text-purple-600 dark:text-purple-400">
-            <LogOut size={16} />
-            Enable MFA
-          </Button>
-        </a>
-      )}
-    </div>
+    <nav aria-label="Quick actions">
+      <ul class="space-y-2 list-none">
+        <li>
+          <a
+            href="/api/auth/logout"
+            class="btn-ghost w-full justify-start text-red-600 dark:text-red-400 inline-flex items-center gap-2"
+          >
+            <LogOut size={16} aria-hidden="true" />
+            <span>Sign Out</span>
+          </a>
+        </li>
+        {!user.mfa_token && (
+          <li>
+            <a
+              href="/api/auth/mfa/create"
+              class="btn-ghost w-full justify-start text-purple-600 dark:text-purple-400 inline-flex items-center gap-2"
+            >
+              <Shield size={16} aria-hidden="true" />
+              <span>Enable Two-Factor Authentication</span>
+            </a>
+          </li>
+        )}
+      </ul>
+    </nav>
   </Card>
-</div>
+</aside>
