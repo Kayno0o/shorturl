@@ -24,4 +24,6 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
+
+  compressHTML: true,
 })
