@@ -1,26 +1,78 @@
 ---
+import { Shield } from '@lucide/astro'
 import { getUserFromJwt } from '../../../api/middleware/auth'
 import { getMfaUrl } from '../../../api/utils/mfa'
-import Button from '../../../components/Button.astro'
+import AuthLayout from '../../../components/AuthLayout.astro'
+import Card from '../../../components/Card.astro'
 import Input from '../../../components/Input.astro'
-import Layout from '../../../layouts/Layout.astro'
 
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
 if (!user)
   return Astro.redirect('/')
 
-
 const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mfaToken')!.value)
 ---
 
-<Layout title="Enable MFA">
-  <canvas data-url={url} id="qrcode"></canvas>
-  <form action="/api/auth/mfa/enable" method="post">
-    <Input label="Digits" type="text" name="digits" />
-    <Button type="submit">confirm</Button>
-  </form>
-</Layout>
+<AuthLayout
+  title="Enable Two-Factor Authentication"
+  heading="Enable 2FA"
+  description="Secure your account with two-factor authentication"
+  formAction="/api/auth/mfa/enable"
+  submitText="Enable 2FA"
+  alternativeText="Already have 2FA enabled?"
+  alternativeLink="/"
+  alternativeLinkText="Back to Dashboard"
+>
+  <Shield size={16} slot="submit-icon" />
+  <Shield size={16} slot="alternative-icon" />
+
+  <Fragment slot="form-fields">
+    <!-- QR Code Section -->
+    <Card class="p-6 text-center mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+        Scan QR Code
+      </h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Use your authenticator app (Google Authenticator, Authy, etc.) to scan this QR code
+      </p>
+
+      <div class="flex justify-center mb-4">
+        <div class="bg-white p-4 rounded-xl shadow-sm">
+          <canvas data-url={url} id="qrcode"></canvas>
+        </div>
+      </div>
+
+      <details class="text-left">
+        <summary class="cursor-pointer text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+          Can't scan? Enter code manually
+        </summary>
+        <div class="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">
+            Enter this code in your authenticator app:
+          </p>
+          <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
+            {cookies.get('mfaToken')!.value}
+          </code>
+        </div>
+      </details>
+    </Card>
+
+    <!-- Verification Input -->
+    <Input
+      label="Verification Code"
+      name="digits"
+      type="text"
+      required
+      placeholder="Enter 6-digit code"
+      autocomplete="one-time-code"
+      minlength={6}
+      maxlength={6}
+      pattern="[0-9]{6}"
+      help="Enter the 6-digit code from your authenticator app"
+    />
+  </Fragment>
+</AuthLayout>
 
 <script>
 import QRCode from 'qrcode'
@@ -28,9 +80,23 @@ import QRCode from 'qrcode'
 const canvas = document.getElementById('qrcode')!
 const url = String(canvas.dataset.url)
 
-QRCode.toCanvas(canvas, url, (error) => {
-  if (error)
-    console.error(error)
-  console.log('success!')
+QRCode.toCanvas(canvas, url, {
+  width: 200,
+  margin: 2,
+  color: {
+    dark: '#000000',
+    light: '#FFFFFF',
+  },
+}, (error) => {
+  if (error) {
+    console.error('QR Code generation failed:', error)
+    canvas.style.display = 'none'
+
+    // Show fallback message
+    const fallback = document.createElement('div')
+    fallback.className = 'text-red-600 dark:text-red-400 text-sm'
+    fallback.textContent = 'QR Code generation failed. Please use manual setup.'
+    canvas.parentNode?.appendChild(fallback)
+  }
 })
 </script>

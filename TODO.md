@@ -7,6 +7,3 @@
 
 # rules
 - disallow links to self url to prevent redirection loop
-
-# auth
-- 2fa

@@ -1,12 +1,93 @@
 ---
-import Button from '../../../components/Button.astro'
+import { ArrowLeft, Shield } from '@lucide/astro'
+import AuthLayout from '../../../components/AuthLayout.astro'
 import Input from '../../../components/Input.astro'
-import Layout from '../../../layouts/Layout.astro'
 ---
 
-<Layout title="Input MFA">
-  <form action="/api/auth/mfa/validate" method="post">
-    <Input label="Digits" type="text" name="digits" />
-    <Button type="submit">confirm</Button>
-  </form>
-</Layout>
+<AuthLayout
+  title="Two-Factor Authentication"
+  heading="Verify Your Identity"
+  description="Enter the 6-digit code from your authenticator app"
+  formAction="/api/auth/mfa/validate"
+  submitText="Verify & Sign In"
+  alternativeText="Lost access to your authenticator?"
+  alternativeLink="/auth/login"
+  alternativeLinkText="Back to Login"
+>
+  <Shield size={16} slot="submit-icon" />
+  <ArrowLeft size={16} slot="alternative-icon" />
+
+  <Fragment slot="form-fields">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <Shield class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">
+        Open your authenticator app and enter the current 6-digit verification code to complete sign in.
+      </p>
+    </div>
+
+    <Input
+      label="Verification Code"
+      name="digits"
+      type="text"
+      required
+      placeholder="000000"
+      autocomplete="one-time-code"
+      minlength={6}
+      maxlength={6}
+      pattern="[0-9]{6}"
+      class="text-center text-2xl tracking-widest font-mono focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+      help="Enter the 6-digit code from your authenticator app"
+    />
+
+    <div class="text-center">
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Codes refresh every 30 seconds. If your code doesn't work, wait for the next one.
+      </p>
+    </div>
+  </Fragment>
+</AuthLayout>
+
+<style>
+  input[name="digits"] {
+    letter-spacing: 0.5em;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+
+<script>
+// auto-focus the input and improve UX
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.querySelector('input[name="digits"]') as HTMLInputElement
+  if (input) {
+    input.focus()
+
+    // only allow numeric input
+    input.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement
+      target.value = target.value.replace(/\D/g, '')
+
+      // auto-submit when 6 digits are entered
+      if (target.value.length === 6) {
+        const form = target.closest('form')
+        if (form) {
+          // small delay to show the complete code
+          setTimeout(() => form.submit(), 300)
+        }
+      }
+    })
+
+    // prevent pasting non-numeric content
+    input.addEventListener('paste', (e) => {
+      e.preventDefault()
+      const paste = (e.clipboardData || (window as any).clipboardData).getData('text')
+      const numericPaste = paste.replace(/\D/g, '').slice(0, 6)
+      input.value = numericPaste
+
+      // trigger input event to handle auto-submit
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+  }
+})
+</script>
