@@ -1,0 +1,83 @@
+---
+import { Moon, Sun } from '@lucide/astro'
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="fixed top-6 right-6 z-50 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+  aria-label="Toggle dark mode"
+  title="Toggle dark mode"
+>
+  <Sun
+    id="theme-toggle-light-icon"
+    size={20}
+    class="text-gray-600 dark:text-gray-400"
+    aria-hidden="true"
+  />
+  <Moon
+    id="theme-toggle-dark-icon"
+    size={20}
+    class="text-gray-600 dark:text-gray-400 hidden"
+    aria-hidden="true"
+  />
+  <span class="sr-only">Toggle dark mode</span>
+</button>
+
+<script>
+// Simple theme management (adapting your working pattern)
+function getTheme() {
+  const stored = localStorage.getItem('theme')
+  if (stored)
+    return stored
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+function applyTheme(theme: string) {
+  const classList = document.documentElement.classList
+  const isLight = theme === 'light'
+
+  classList.toggle('light', isLight)
+  classList.toggle('dark', !isLight)
+
+  localStorage.setItem('theme', theme)
+
+  const lightIcon = document.getElementById('theme-toggle-light-icon')
+  const darkIcon = document.getElementById('theme-toggle-dark-icon')
+
+  if (lightIcon && darkIcon) {
+    lightIcon.classList.toggle('hidden', !isLight)
+    darkIcon.classList.toggle('hidden', isLight)
+  }
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.classList.contains('light')
+  applyTheme(isLight ? 'dark' : 'light')
+}
+
+function initThemeToggle() {
+  // Initialize theme
+  applyTheme(getTheme())
+
+  // Add click listener with view transition
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(toggleTheme)
+    }
+    else {
+      toggleTheme()
+    }
+  })
+}
+
+// Initialize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initThemeToggle)
+}
+else {
+  initThemeToggle()
+}
+
+document.addEventListener('astro:page-load', initThemeToggle)
+</script>
