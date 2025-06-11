@@ -3,6 +3,7 @@ import { Elysia, redirect } from 'elysia'
 import { authService } from './middleware/auth'
 import { initORM } from './orm'
 import { Link } from './orm/entities/link'
+import { User } from './orm/entities/user'
 import authRoutes from './routes/auth'
 import linkRoutes from './routes/link'
 
@@ -12,14 +13,43 @@ const port = portIndex !== -1 && args[portIndex + 1] ? Number(args[portIndex + 1
 
 await initORM()
 
+if (args.length) {
+  const isFixture = args.findIndex(arg => arg === 'fixtures')
+
+  if (isFixture >= 0) {
+    const name = args[isFixture + 1]
+    if (!name) {
+      console.log('error', 'no fixture name given')
+      process.exit()
+    }
+
+    const fixture = (await import(`./orm/fixtures/${name}`))?.default
+    if (!fixture) {
+      console.log('error', 'fixture not found or no default export')
+      process.exit()
+    }
+
+    fixture()
+    console.log('fixture', name, 'executed successfully')
+    process.exit()
+  }
+}
+
 const app = new Elysia()
   .use(authService)
   .group('/api', app => app
     .use(linkRoutes)
     .use(authRoutes))
-  .get('/:uid/:code', ({ params: { code,uid } }) => {
+  .get('/:code', ({ params: { code } }) => {
+    const [namespace, ...codeParts] = code.split('-')
+    code = codeParts.join('-')
+
+    const owner = getRepository(User.prototype)!.findOneBy({ where: { namespace } })
+    if (!owner)
+      return new Error('Link not found')
+
     const repo = getRepository(Link.prototype)!
-    const link = repo.findOneBy({ where: { code,owner:uid } })
+    const link = repo.findOneBy({ where: { code, owner: owner.id } })
     if (!link)
       return new Error('Link not found')
 

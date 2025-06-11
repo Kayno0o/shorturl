@@ -6,7 +6,7 @@ import { Link } from '../orm/entities/link'
 
 const xxhash = await xxhashWasm()
 
-const linkController = new Elysia({ prefix: '/l' })
+const linkController = new Elysia({ prefix: '/link' })
   .use(authService)
   .get('/:code', ({ auth, params: { code } }) => {
     const repo = getRepository(Link.prototype)!
