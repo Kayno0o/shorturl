@@ -1,14 +1,16 @@
 ---
 import type { Link } from '../api/orm/entities/link'
+import type { User } from '../api/orm/entities/user'
 import Card from './Card.astro'
 import LinkCard from './LinkCard.astro'
 
 export interface Props {
   links: Link[]
   shortUrl: string
+  user: User
 }
 
-const { links, shortUrl } = Astro.props
+const { links, shortUrl, user } = Astro.props
 ---
 
 {links.length > 0 && (
@@ -29,6 +31,7 @@ const { links, shortUrl } = Astro.props
           value={link.value}
           shortUrl={shortUrl}
           clickCount={link.clickCount}
+          user={user}
         />
       ))}
     </div>

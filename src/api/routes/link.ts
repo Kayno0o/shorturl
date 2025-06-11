@@ -8,6 +8,12 @@ const xxhash = await xxhashWasm()
 
 const linkController = new Elysia({ prefix: '/l' })
   .use(authService)
+  .get('/:code', ({ auth, params: { code } }) => {
+    const repo = getRepository(Link.prototype)!
+    return repo.findOneBy({ where: { owner: auth.user!.id, code } })
+  }, {
+    requireAuth: true,
+  })
   .get('/', ({ auth }) => {
     const repo = getRepository(Link.prototype)!
     return repo.findAllBy({ where: { owner: auth.user!.id } })

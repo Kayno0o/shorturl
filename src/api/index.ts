@@ -17,9 +17,9 @@ const app = new Elysia()
   .group('/api', app => app
     .use(linkRoutes)
     .use(authRoutes))
-  .get('/:code', ({ params: { code } }) => {
+  .get('/:uid/:code', ({ params: { code,uid } }) => {
     const repo = getRepository(Link.prototype)!
-    const link = repo.findOneBy({ where: { code } })
+    const link = repo.findOneBy({ where: { code,owner:uid } })
     if (!link)
       return new Error('Link not found')
 

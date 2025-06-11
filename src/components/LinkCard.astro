@@ -1,4 +1,5 @@
 ---
+import type { User } from '../api/orm/entities/user'
 import { Copy, Edit, ExternalLink, Trash2, TrendingUp } from '@lucide/astro'
 
 export interface Props {
@@ -6,10 +7,11 @@ export interface Props {
   value: string
   shortUrl: string
   clickCount: number
+  user: User
 }
 
-const { code, value, shortUrl, clickCount } = Astro.props
-const fullShortUrl = `https://${shortUrl}/${encodeURIComponent(code)}`
+const { code, value, shortUrl, user, clickCount } = Astro.props
+const fullShortUrl = `https://${shortUrl}/${user.id}/${encodeURIComponent(code)}`
 ---
 
 <article class="bento-card bento-card-hover p-5" aria-label={`Short link: ${code}`}>
@@ -28,7 +30,7 @@ const fullShortUrl = `https://${shortUrl}/${encodeURIComponent(code)}`
         <Copy size={16} aria-hidden="true" />
       </button>
       <a
-        href={`/edit/${code}`}
+        href={`/edit/${encodeURIComponent(code)}`}
         class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 p-1 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
         aria-label={`Edit link ${code}`}
       >
