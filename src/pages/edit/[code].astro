@@ -1,16 +1,16 @@
 ---
 import type { Link } from '../../api/orm/entities/link'
-import { ArrowLeft } from '@lucide/astro'
+import { ArrowLeft, ExternalLink, MousePointerClick, Save, Trash2 } from '@lucide/astro'
 import { getUserFromJwt } from '../../api/middleware/auth'
+import Button from '../../components/Button.astro'
 import Card from '../../components/Card.astro'
-import EditLinkForm from '../../components/EditLinkForm.astro'
+import Input from '../../components/Input.astro'
 import Layout from '../../layouts/Layout.astro'
 
 const { code } = Astro.params
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
 
-// redirect to login if not authenticated
 if (!user) {
   return Astro.redirect('/auth/login')
 }
@@ -36,58 +36,102 @@ if (!link) {
 ---
 
 <Layout title={`Edit Link - ${code}`}>
-  <div class="max-w-2xl mx-auto space-y-6">
+  <div class="max-w-2xl mx-auto space-y-4">
     <!-- Header -->
-    <Card class="p-6 text-center">
-      <h1 class="text-3xl font-bold gradient-text mb-2">
-        Edit Link
-      </h1>
-      <p class="text-gray-600 dark:text-gray-400">
-        Update your short link settings
-      </p>
-    </Card>
-
-    <!-- Edit Form -->
-    <EditLinkForm
-      code={link.code}
-      value={link.value}
-      originalCode={link.code}
-    />
-
-    <!-- Current Stats -->
-    <Card class="p-6">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-        Current Statistics
-      </h3>
-      <div class="grid grid-cols-2 gap-4 text-center">
+    <Card class="p-4">
+      <div class="flex items-center justify-between">
         <div>
-          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {link.clickCount}
-          </div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">
-            Total Clicks
-          </div>
+          <h1 class="text-lg font-semibold">Edit Link</h1>
+          <p class="text-xs" style="color: var(--text-secondary)">
+            Update your short link settings
+          </p>
         </div>
-        <div>
-          <div class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {link.code}
-          </div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">
-            Short Code
-          </div>
-        </div>
+        <a
+          href="/"
+          class="btn btn-ghost btn-sm"
+        >
+          <ArrowLeft size={14} />
+          Back
+        </a>
       </div>
     </Card>
 
-    <!-- Back Navigation -->
-    <div class="text-center">
-      <a
-        href="/"
-        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-sm transition-colors inline-flex items-center"
-      >
-        <ArrowLeft size={16} class="mr-1" />
-        Back to Dashboard
-      </a>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Edit Form -->
+      <div class="md:col-span-2">
+        <Card>
+          <form action={`/api/link/update/${link.code}`} method="post" class="space-y-4">
+            <Input
+              label="Short Code"
+              name="code"
+              value={link.code}
+              required
+              minlength={3}
+              maxlength={32}
+              help="3-32 characters"
+            />
+
+            <Input
+              label="Destination URL"
+              name="value"
+              type="url"
+              value={link.value}
+              required
+              help="Where users will be redirected"
+            />
+
+            <div class="flex gap-2">
+              <Button type="submit" class="flex-1">
+                <Save size={16} />
+                Save Changes
+              </Button>
+              <form action={`/api/link/delete/${link.code}`} method="post" class="contents">
+                <Button type="submit" variant="danger">
+                  <Trash2 size={16} />
+                  Delete
+                </Button>
+              </form>
+            </div>
+          </form>
+        </Card>
+      </div>
+
+      <!-- Stats & Info -->
+      <div class="space-y-4">
+        <!-- Quick Stats -->
+        <Card>
+          <h3 class="text-sm font-semibold mb-3">Statistics</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <MousePointerClick size={14} class="text-purple-600 dark:text-purple-400" />
+                <span class="text-xs" style="color: var(--text-secondary)">Total Clicks</span>
+              </div>
+              <span class="text-lg font-bold">{link.clickCount}</span>
+            </div>
+          </div>
+        </Card>
+
+        <!-- Link Preview -->
+        <Card>
+          <h3 class="text-sm font-semibold mb-3">Preview</h3>
+          <div class="space-y-2">
+            <div class="text-xs" style="color: var(--text-secondary)">Short URL</div>
+            <code class="code-inline text-xs break-all">
+              {new URL(`/${user.namespace}-${link.code}`, `https://${import.meta.env.SHORT_URL}`).href}
+            </code>
+            <a
+              href={link.value}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 hover:underline mt-2"
+            >
+              <ExternalLink size={12} />
+              Visit destination
+            </a>
+          </div>
+        </Card>
+      </div>
     </div>
   </div>
 </Layout>

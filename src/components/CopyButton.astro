@@ -1,0 +1,84 @@
+---
+export interface Props {
+  text: string
+  class?: string
+  title?: string
+}
+
+const {
+  text,
+  class: className = 'btn-icon btn-ghost btn-sm',
+  title = 'Copy to clipboard',
+} = Astro.props
+---
+
+<button
+  type="button"
+  class={`copy-btn ${className}`}
+  data-text={text}
+  title={title}
+>
+  <!-- Copy icon -->
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="copy-icon">
+    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+  </svg>
+
+  <!-- Success icon (hidden by default) -->
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="success-icon hidden">
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+</button>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle copy button clicks
+  const buttons = document.querySelectorAll<HTMLElement>('.copy-btn')
+  for (const button of buttons) {
+    button.addEventListener('click', async () => {
+      const text = button.dataset.text
+      if (!text)
+        return
+
+      try {
+        await navigator.clipboard.writeText(text)
+
+        // Show success state
+        const copyIcon = button.querySelector('.copy-icon')
+        const successIcon = button.querySelector('.success-icon')
+
+        copyIcon?.classList.add('hidden')
+        successIcon?.classList.remove('hidden')
+        button.classList.add('text-green-600', 'dark:text-green-400')
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden')
+          successIcon?.classList.add('hidden')
+          button.classList.remove('text-green-600', 'dark:text-green-400')
+        }, 2000)
+      }
+      catch (err) {
+        console.error('Failed to copy:', err)
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea')
+        textArea.value = text
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+      }
+    })
+  }
+})
+
+// Re-run for dynamic content
+document.addEventListener('astro:page-load', () => {
+  const buttons = document.querySelectorAll<HTMLElement>('.copy-btn')
+  for (const button of buttons) {
+    // Remove existing listeners to avoid duplicates
+    const newButton = button.cloneNode(true)
+    button.parentNode?.replaceChild(newButton, button)
+  }
+})
+</script>
