@@ -109,7 +109,7 @@ const authController = new Elysia({ prefix: '/auth' })
     user.mfa_token = mfaToken.value
     repo.update(user.id, user)
 
-    return redirect('/')
+    return redirect('/dashboard')
   }, {
     body: t.Object({
       digits: t.String({ minLength: 6, maxLength: 6 }),
@@ -130,7 +130,7 @@ const authController = new Elysia({ prefix: '/auth' })
 
     createTokenAndSetCookie(user.id, jwtToken)
 
-    return redirect('/')
+    return redirect('/dashboard')
   }, {
     body: t.Object({
       digits: t.String({ minLength: 6, maxLength: 6 }),
@@ -145,7 +145,7 @@ const authController = new Elysia({ prefix: '/auth' })
     }
 
     createTokenAndSetCookie(user.id, jwtToken)
-    return redirect('/')
+    return redirect('/dashboard')
   }, {
     body: t.Object({
       username: t.String({ minLength: 2, maxLength: 16 }),
@@ -156,7 +156,7 @@ const authController = new Elysia({ prefix: '/auth' })
     try {
       const user = await service.register(body.username, body.password)
       createTokenAndSetCookie(user.id, jwtToken)
-      return redirect('/')
+      return redirect('/dashboard')
     }
     catch (error) {
       return new Error(error instanceof Error ? error.message : 'Registration failed')

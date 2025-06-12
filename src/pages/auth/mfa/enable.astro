@@ -5,7 +5,7 @@ import { getMfaUrl } from '../../../api/utils/mfa'
 import Button from '../../../components/Button.astro'
 import Card from '../../../components/Card.astro'
 import Input from '../../../components/Input.astro'
-import Layout from '../../../layouts/Layout.astro'
+import UserLayout from '../../../layouts/UserLayout.astro'
 
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
@@ -15,7 +15,7 @@ if (!user)
 const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mfaToken')!.value)
 ---
 
-<Layout title="Enable 2FA">
+<UserLayout title="Enable 2FA">
   <div class="max-w-md mx-auto space-y-4">
     <!-- Header -->
     <Card class="text-center">
@@ -79,7 +79,7 @@ const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mf
       </a>
     </div>
   </div>
-</Layout>
+</UserLayout>
 
 <script>
 import QRCode from 'qrcode'

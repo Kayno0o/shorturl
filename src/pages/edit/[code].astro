@@ -1,11 +1,12 @@
 ---
-import type { Link } from '../../api/orm/entities/link'
-import { ArrowLeft, ExternalLink, MousePointerClick, Save, Trash2 } from '@lucide/astro'
+import type { Link, LinkAnalytics } from '../../api/orm/entities/link'
+import { ArrowLeft, ExternalLink, Globe, MousePointerClick, Save, Trash2 } from '@lucide/astro'
 import { getUserFromJwt } from '../../api/middleware/auth'
 import Button from '../../components/Button.astro'
 import Card from '../../components/Card.astro'
 import Input from '../../components/Input.astro'
-import Layout from '../../layouts/Layout.astro'
+import UserLayout from '../../layouts/UserLayout.astro'
+import { countryNames } from '../../utils/countries'
 
 const { code } = Astro.params
 const cookies = Astro.cookies
@@ -31,11 +32,17 @@ catch (e) {
 }
 
 if (!link) {
-  return Astro.redirect('/')
+  return Astro.redirect('/links')
 }
+
+const analytics: LinkAnalytics = JSON.parse(link.analytics)
+
+const countryEntries = Object.entries(analytics.countries || {})
+  .sort(([,a], [,b]) => b - a)
+  .slice(0, 3) // Show top 3 countries
 ---
 
-<Layout title={`Edit Link - ${code}`}>
+<UserLayout title={`Edit Link - ${code}`}>
   <div class="max-w-2xl mx-auto space-y-4">
     <!-- Header -->
     <Card class="p-4">
@@ -109,6 +116,26 @@ if (!link) {
               </div>
               <span class="text-lg font-bold">{link.clickCount}</span>
             </div>
+            <div class="grid gap-1.5">
+              <div class="flex items-center gap-2">
+                <Globe size={14} class="text-gray-600 dark:text-gray-400" />
+                <span class="text-xs" style="color: var(--text-secondary)">Top Countries:</span>
+              </div>
+              {countryEntries.map(([countryCode, count]) => (
+                <div class="flex items-center justify-between">
+                  <span class="text-xs">{countryNames[countryCode]}</span>
+                  <div class="flex items-center gap-2">
+                    <div class="flex-1 h-1 w-16 rounded-full overflow-hidden" style="background-color: var(--bg-tertiary)">
+                      <div
+                        class="h-full rounded-full w-full"
+                        style="background-color: var(--pastel-purple)"
+                      />
+                    </div>
+                    <span class="text-xs font-medium">{count}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </Card>
 
@@ -134,4 +161,4 @@ if (!link) {
       </div>
     </div>
   </div>
-</Layout>
+</UserLayout>

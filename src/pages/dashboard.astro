@@ -5,7 +5,6 @@ import {
   Globe,
   Key,
   Link as LinkIcon,
-  LogOut,
   MousePointerClick,
   Plus,
   Shield,
@@ -14,7 +13,7 @@ import {
 import { getUserFromJwt } from '../api/middleware/auth'
 import Card from '../components/Card.astro'
 import CopyButton from '../components/CopyButton.astro'
-import Layout from '../layouts/Layout.astro'
+import UserLayout from '../layouts/UserLayout.astro'
 import { countryNames } from '../utils/countries'
 
 const cookies = Astro.cookies
@@ -56,20 +55,7 @@ const topCountries = Object.entries(countriesAggregate)
   .slice(0, 5)
 ---
 
-<Layout title="Dashboard">
-  <div class="space-y-4" slot="header">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-lg font-semibold">Welcome back, {user.username}</h1>
-        <p class="text-xs" style="color: var(--text-secondary)">Manage your short links and view analytics</p>
-      </div>
-      <a href="/api/auth/logout" class="btn btn-ghost btn-sm">
-        <LogOut size={14} />
-        <span>Logout</span>
-      </a>
-    </div>
-  </div>
-
+<UserLayout title="Dashboard">
   <div class="space-y-6">
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -159,7 +145,7 @@ const topCountries = Object.entries(countriesAggregate)
 
           {links.length > 0
             ? (
-              <div class="space-y-2">
+              <div class="md:grid md:grid-cols-2 gap-2 not-md:space-y-2">
                 {links.slice(0, 10).map(link => (
                   <div class="dash-card compact p-3 flex items-center justify-between gap-2">
                     <div class="flex-1 min-w-0">
@@ -273,4 +259,4 @@ const topCountries = Object.entries(countriesAggregate)
       </div>
     </div>
   </div>
-</Layout>
+</UserLayout>

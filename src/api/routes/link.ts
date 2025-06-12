@@ -27,7 +27,7 @@ const linkController = new Elysia({ prefix: '/link' })
 
     repo.create(new Link({ code: body.code || xxhash.h64ToString(body.value), value: body.value, owner: auth.user!.id }))
 
-    return redirect('/')
+    return redirect('/links')
   }, {
     body: t.Object({
       code: t.Union([
@@ -46,7 +46,7 @@ const linkController = new Elysia({ prefix: '/link' })
       return new Error('Link not found')
 
     repo.delete(link.id)
-    return redirect('/')
+    return redirect('/links')
   }, {
     requireAuth: true,
   })
@@ -61,7 +61,7 @@ const linkController = new Elysia({ prefix: '/link' })
     link.value = value
 
     repo.update(link.id, link)
-    return redirect('/')
+    return redirect('/links')
   }, {
     body: t.Object({
       code: t.String({ minLength: 3, maxLength: 32 }),
