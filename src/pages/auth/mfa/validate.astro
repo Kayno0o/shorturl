@@ -3,83 +3,52 @@ import { ArrowLeft, Shield } from '@lucide/astro'
 import Button from '../../../components/Button.astro'
 import Card from '../../../components/Card.astro'
 import Input from '../../../components/Input.astro'
-import '../../../styles/global.css'
+import AuthLayout from '../../../layouts/AuthLayout.astro'
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="Two-Factor Authentication" />
-    <title>2FA Verification - Shortlink Dashboard</title>
-
-    <script is:inline>
-(function () {
-  const getTheme = () => {
-    const stored = localStorage.getItem('theme')
-    if (stored)
-      return stored
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
-  const theme = getTheme()
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark')
-  }
-})()
-</script>
-  </head>
-
-  <body class="min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-sm">
-      <!-- Logo/Title -->
-      <div class="text-center mb-6">
-        <div class="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
-          <Shield size={24} class="text-purple-700 dark:text-purple-300" />
-        </div>
-        <h1 class="text-xl font-bold">Two-Factor Authentication</h1>
-        <p class="text-sm mt-1" style="color: var(--text-secondary)">Enter your 6-digit code</p>
-      </div>
-
-      <!-- Verification Form -->
-      <Card>
-        <form action="/api/auth/mfa/validate" method="post" class="space-y-4">
-          <Input
-            name="digits"
-            type="text"
-            required
-            placeholder="000000"
-            autocomplete="one-time-code"
-            minlength={6}
-            maxlength={6}
-            pattern="[0-9]{6}"
-            class="text-center text-xl font-mono tracking-widest"
-            help="From your authenticator app"
-          />
-
-          <Button type="submit" class="w-full">
-            <Shield size={16} />
-            Verify & Sign In
-          </Button>
-        </form>
-
-        <div class="mt-4 pt-4 border-t" style="border-color: var(--border-color)">
-          <a href="/auth/login" class="flex items-center justify-center gap-1 text-xs" style="color: var(--text-secondary)">
-            <ArrowLeft size={12} />
-            Back to login
-          </a>
-        </div>
-      </Card>
+<AuthLayout
+  title="2FA Verification"
+  description="Two-Factor Authentication"
+  showBackHome={false}
+>
+  <div slot="header">
+    <div class="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
+      <Shield size={24} class="text-purple-700 dark:text-purple-300" />
     </div>
+    <h1 class="text-xl font-bold">Two-Factor Authentication</h1>
+    <p class="text-sm mt-1" style="color: var(--text-secondary)">Enter your 6-digit code</p>
+  </div>
 
-    <!-- Decorative Elements -->
-    <div class="fixed inset-0 -z-10 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-purple)"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-blue)"></div>
+  <!-- Verification Form -->
+  <Card>
+    <form action="/api/auth/mfa/validate" method="post" class="space-y-4">
+      <Input
+        name="digits"
+        type="text"
+        required
+        placeholder="000000"
+        autocomplete="one-time-code"
+        minlength={6}
+        maxlength={6}
+        pattern="[0-9]{6}"
+        class="text-center text-xl font-mono tracking-widest"
+        help="From your authenticator app"
+      />
+
+      <Button type="submit" class="w-full">
+        <Shield size={16} />
+        Verify & Sign In
+      </Button>
+    </form>
+
+    <div class="mt-4 pt-4 border-t" style="border-color: var(--border-color)">
+      <a href="/auth/login" class="flex items-center justify-center gap-1 text-xs" style="color: var(--text-secondary)">
+        <ArrowLeft size={12} />
+        Back to login
+      </a>
     </div>
-  </body>
-</html>
+  </Card>
+</AuthLayout>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -94,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target.value.length === 6) {
         const form = target.closest('form')
         if (form) {
-          setTimeout(() => form.submit(), 300)
+          form.submit()
         }
       }
     })

@@ -1,0 +1,73 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title: string
+  description?: string
+  showBackHome?: boolean
+}
+
+const {
+  title,
+  description = 'Shortlink Authentication',
+  showBackHome = true,
+} = Astro.props
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title} - Shortlink Dashboard</title>
+
+    <script is:inline>
+(function () {
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme')
+    if (stored)
+      return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  const theme = getTheme()
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  }
+})()
+</script>
+  </head>
+
+  <body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-sm">
+      <!-- Logo/Title -->
+      <div class="text-center mb-6">
+        <slot name="header">
+          <h1 class="text-2xl font-bold gradient-text mb-1">Shortlink</h1>
+          <p class="text-sm" style="color: var(--text-secondary)">
+            <slot name="subtitle" />
+          </p>
+        </slot>
+      </div>
+
+      <!-- Main Content -->
+      <slot />
+
+      <!-- Back Home -->
+      {showBackHome && (
+        <div class="text-center mt-4">
+          <a href="/" class="text-xs" style="color: var(--text-tertiary)">
+            ← Back to home
+          </a>
+        </div>
+      )}
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-purple)"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-blue)"></div>
+    </div>
+  </body>
+</html>
