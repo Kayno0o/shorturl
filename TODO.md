@@ -1,5 +1,4 @@
 # analytics
-- country
 - browser + browser version
 
 # api
