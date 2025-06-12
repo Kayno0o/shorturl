@@ -4,9 +4,10 @@ import '../styles/global.css'
 
 interface Props {
   title: string
+  showSidebar?: boolean
 }
 
-const props = Astro.props
+const { title, showSidebar = false } = Astro.props
 ---
 
 <html lang="en">
@@ -15,29 +16,28 @@ const props = Astro.props
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="Create and manage short URLs with analytics" />
-    <title>{props.title} - URL Shortener</title>
+    <meta name="description" content="URL Shortener Dashboard - Manage your short links" />
+    <title>{title} - Shortlink Dashboard</title>
 
     <!-- Prevent flash of incorrect theme -->
     <script is:inline>
-    (function () {
-      const getTheme = () => {
-        const stored = localStorage.getItem('theme')
-        if (stored)
-          return stored
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      }
-
-      const theme = getTheme()
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
-      }
-    })()
-    </script>
+(function () {
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme')
+    if (stored)
+      return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  const theme = getTheme()
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  }
+})()
+</script>
   </head>
 
-  <body class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Skip to content link -->
+  <body class="min-h-screen">
+    <!-- Skip to content -->
     <a href="#main-content" class="skip-link">
       Skip to main content
     </a>
@@ -45,14 +45,28 @@ const props = Astro.props
     <!-- Dark mode toggle -->
     <DarkModeToggle />
 
-    <!-- Grid background pattern -->
-    <div class="fixed inset-0 bg-grid-pattern opacity-[0.02] dark:opacity-[0.05] pointer-events-none transition-opacity duration-200" aria-hidden="true"></div>
+    <!-- Dashboard Layout -->
+    <div class="flex h-screen overflow-hidden">
+      {showSidebar && (
+        <aside class="sidebar w-64 p-4 hidden lg:block">
+          <slot name="sidebar" />
+        </aside>
+      )}
 
-    <!-- Main content -->
-    <main id="main-content" class="relative z-10 min-h-screen flex items-center justify-center p-6">
-      <div class="w-full max-w-6xl">
-        <slot />
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Bar -->
+        <header class="dash-card border-0 border-b rounded-none px-6 py-3 flex items-center justify-between">
+          <slot name="header">
+            <h1 class="text-lg font-semibold gradient-text">Shortlink</h1>
+          </slot>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 overflow-y-auto p-4 md:p-6">
+          <slot />
+        </main>
       </div>
-    </main>
+    </div>
   </body>
 </html>

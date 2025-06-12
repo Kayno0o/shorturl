@@ -1,38 +1,92 @@
 ---
-import { LogIn, UserPlus } from '@lucide/astro'
-import AuthLayout from '../../components/AuthLayout.astro'
+import { LogIn } from '@lucide/astro'
+import Button from '../../components/Button.astro'
+import Card from '../../components/Card.astro'
 import Input from '../../components/Input.astro'
+import '../../styles/global.css'
 ---
 
-<AuthLayout
-  title="Sign In"
-  heading="Welcome Back"
-  description="Sign in to your account to continue"
-  formAction="/api/auth/login"
-  submitText="Sign In"
-  alternativeText="Don't have an account yet?"
-  alternativeLink="/auth/register"
-  alternativeLinkText="Create Account"
->
-  <LogIn size={16} slot="submit-icon" />
-  <UserPlus size={16} slot="alternative-icon" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Login to your Shortlink Dashboard" />
+    <title>Login - Shortlink Dashboard</title>
 
-  <Fragment slot="form-fields">
-    <Input
-      label="Username"
-      name="username"
-      required
-      placeholder="Enter your username"
-      autocomplete="username"
-    />
+    <script is:inline>
+(function () {
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme')
+    if (stored)
+      return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  const theme = getTheme()
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  }
+})()
+</script>
+  </head>
 
-    <Input
-      label="Password"
-      type="password"
-      name="password"
-      required
-      placeholder="Enter your password"
-      autocomplete="current-password"
-    />
-  </Fragment>
-</AuthLayout>
+  <body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-sm">
+      <!-- Logo/Title -->
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold gradient-text mb-1">Shortlink</h1>
+        <p class="text-sm" style="color: var(--text-secondary)">Welcome back</p>
+      </div>
+
+      <!-- Login Form -->
+      <Card>
+        <form action="/api/auth/login" method="post" class="space-y-4">
+          <Input
+            label="Username"
+            name="username"
+            required
+            placeholder="Enter username"
+            autocomplete="username"
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            required
+            placeholder="Enter password"
+            autocomplete="current-password"
+          />
+
+          <Button type="submit" class="w-full">
+            <LogIn size={16} />
+            Sign In
+          </Button>
+        </form>
+
+        <div class="mt-4 pt-4 border-t" style="border-color: var(--border-color)">
+          <p class="text-xs text-center" style="color: var(--text-secondary)">
+            Don't have an account?
+            <a href="/auth/register" class="text-purple-600 dark:text-purple-400 hover:underline ml-1">
+              Create one
+            </a>
+          </p>
+        </div>
+      </Card>
+
+      <!-- Back Home -->
+      <div class="text-center mt-4">
+        <a href="/" class="text-xs" style="color: var(--text-tertiary)">
+          ← Back to home
+        </a>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-purple)"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-blue)"></div>
+    </div>
+  </body>
+</html>

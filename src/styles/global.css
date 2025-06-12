@@ -30,132 +30,249 @@
   }
 }
 
+/* CSS Variables for Pastel Color System */
+:root {
+  /* Pastel Primary Colors */
+  --pastel-purple: #e9d5ff;
+  --pastel-blue: #dbeafe;
+  --pastel-green: #d1fae5;
+  --pastel-pink: #fce7f3;
+  --pastel-yellow: #fef3c7;
+  --pastel-coral: #fed7aa;
+
+  /* Light Mode Colors */
+  --bg-primary: #fefefe;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border-color: #e5e7eb;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  /* Dark Mode - Muted Pastels */
+  --pastel-purple: #6b5b7b;
+  --pastel-blue: #4b6584;
+  --pastel-green: #4b7c6b;
+  --pastel-pink: #7b5b6b;
+  --pastel-yellow: #7c7b5b;
+  --pastel-coral: #7c6b5b;
+
+  --bg-primary: #1a1b23;
+  --bg-secondary: #1f2028;
+  --bg-tertiary: #25262f;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-tertiary: #6b7280;
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Base styles */
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+@utility dash-card {
+  background-color: var(--bg-primary);
+  @apply rounded-lg border shadow-sm transition-all duration-200;
+  border-color: var(--border-color);
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+
 @layer utilities {
-  /* Skip link for keyboard navigation */
+  /* Skip link */
   .skip-link {
     @apply absolute left-4 top-4 -translate-y-16 focus:translate-y-0;
-    @apply bg-blue-600 text-white px-4 py-2 rounded-md font-medium;
-    @apply transition-transform duration-200;
-    @apply z-50 no-underline;
+    @apply bg-purple-500 text-white px-3 py-1.5 rounded-md text-sm font-medium;
+    @apply transition-transform duration-200 z-50 no-underline;
   }
 
-  /* Screen reader only content */
+  /* Screen reader only */
   .sr-only {
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
   }
 
-  /* Enhanced focus styles for accessibility */
+  /* Focus styles */
   *:focus {
     @apply outline-none;
   }
 
   *:focus-visible {
-    @apply ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 rounded;
+    @apply ring-2 ring-purple-400 ring-offset-1 rounded;
   }
 
-  /* Ensure interactive elements have proper focus */
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    @apply ring-2 ring-blue-500 ring-offset-2;
+  /* Dashboard Card Styles */
+  .dash-card-hover {
+    @apply hover:shadow-md hover:-translate-y-0.5;
   }
 
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  .dash-card-interactive {
+    @apply cursor-pointer hover:shadow-lg hover:-translate-y-1 active:translate-y-0;
   }
 
-  /* Bento card styles */
-  .bento-card {
-    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-200;
+  /* Compact Dashboard Grid */
+  .dash-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 
-  .bento-card-hover {
-    @apply hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5;
+  /* Stat Cards */
+  .stat-card {
+    @apply dash-card p-4 flex items-center justify-between;
   }
 
-  .bento-card-interactive {
-    @apply cursor-pointer hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 hover:-translate-y-1 active:translate-y-0 active:shadow-md;
+  .stat-value {
+    @apply text-2xl font-bold;
   }
 
-  /* Grid background pattern */
-  .bg-grid-pattern {
-    background-image:
-      linear-gradient(rgb(0 0 0 / 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(0 0 0 / 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
+  .stat-label {
+    @apply text-sm;
+    color: var(--text-secondary);
   }
 
-  /* button styles with disabled states */
-  .btn-primary {
-    @apply px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-none;
-  }
-
-  .btn-secondary {
-    @apply px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-medium rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none;
-  }
-
-  .btn-ghost {
-    @apply px-6 py-3 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-200;
+  /* Buttons - Compact & Pastel */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Size modifiers for buttons */
-  .btn-ghost.size-sm {
-    @apply px-3 py-2 text-sm;
+  .btn-primary {
+    background-color: var(--pastel-purple);
+    @apply text-purple-900 dark:text-purple-100;
+    @apply hover:brightness-95 hover:shadow-md active:shadow-sm;
   }
 
-  /* Form inputs with better focus states */
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply hover:brightness-95;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent;
+    color: var(--text-secondary);
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+
+  .btn-danger {
+    background-color: var(--pastel-pink);
+    @apply text-pink-900 dark:text-pink-100;
+    @apply hover:brightness-95;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-lg;
+  }
+
+  /* Form Inputs - Compact */
   .input-field {
-    @apply w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500;
-    @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    @apply w-full px-3 py-2 rounded-lg border text-sm transition-all;
+    @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
+    @apply focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20;
   }
 
-  /* Error state for inputs */
   .input-field[aria-invalid='true'] {
-    @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
+    @apply border-pink-400 focus:border-pink-400 focus:ring-pink-400/20;
   }
 
-  /* gradients */
+  /* Labels */
+  .label {
+    color: var(--text-secondary);
+    @apply block text-xs font-medium mb-1;
+  }
+
+  /* Gradients with pastels */
   .gradient-text {
-    @apply bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400;
+    @apply bg-clip-text text-transparent;
   }
 
-  .gradient-primary {
-    @apply bg-gradient-to-r from-blue-600 to-blue-700;
+  /* Status indicators */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
   }
 
-  /* Status colors with proper contrast */
   .status-success {
-    @apply text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20;
-  }
-
-  .status-error {
-    @apply text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20;
+    background-color: var(--pastel-green);
   }
 
   .status-warning {
-    @apply text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20;
+    background-color: var(--pastel-yellow);
+  }
+
+  .status-error {
+    background-color: var(--pastel-pink);
+  }
+
+  /* Compact table styles */
+  .dash-table {
+    @apply w-full text-sm;
+  }
+
+  .dash-table th {
+    color: var(--text-secondary);
+    @apply text-left font-medium text-xs uppercase tracking-wider pb-2;
+  }
+
+  .dash-table td {
+    @apply py-2;
+  }
+
+  /* Sidebar styles */
+  .sidebar {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    @apply border-r h-full;
   }
 
   /* Code blocks */
-  .code-block {
-    @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-lg font-mono text-sm border border-gray-200 dark:border-gray-700;
+  .code-inline {
+    background-color: var(--bg-tertiary);
+    @apply px-1.5 py-0.5 rounded text-xs font-mono;
   }
 
-  /* List reset for navigation */
-  nav ul {
-    @apply list-none p-0 m-0;
+  /* Tooltips */
+  .tooltip {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply absolute z-50 px-2 py-1 text-xs rounded shadow-lg;
+  }
+
+  /* Navigation tabs */
+  .nav-tab {
+    color: var(--text-secondary);
+    @apply px-3 py-2 text-sm font-medium rounded-lg transition-all;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+
+  .nav-tab.active {
+    background-color: var(--pastel-purple);
+    @apply text-purple-900 dark:text-purple-100;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

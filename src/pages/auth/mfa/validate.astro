@@ -1,91 +1,109 @@
 ---
 import { ArrowLeft, Shield } from '@lucide/astro'
-import AuthLayout from '../../../components/AuthLayout.astro'
+import Button from '../../../components/Button.astro'
+import Card from '../../../components/Card.astro'
 import Input from '../../../components/Input.astro'
+import '../../../styles/global.css'
 ---
 
-<AuthLayout
-  title="Two-Factor Authentication"
-  heading="Verify Your Identity"
-  description="Enter the 6-digit code from your authenticator app"
-  formAction="/api/auth/mfa/validate"
-  submitText="Verify & Sign In"
-  alternativeText="Lost access to your authenticator?"
-  alternativeLink="/auth/login"
-  alternativeLinkText="Back to Login"
->
-  <Shield size={16} slot="submit-icon" />
-  <ArrowLeft size={16} slot="alternative-icon" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Two-Factor Authentication" />
+    <title>2FA Verification - Shortlink Dashboard</title>
 
-  <Fragment slot="form-fields">
-    <div class="text-center mb-6">
-      <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <Shield class="w-8 h-8 text-blue-600 dark:text-blue-400" />
-      </div>
-      <p class="text-gray-600 dark:text-gray-400 text-sm">
-        Open your authenticator app and enter the current 6-digit verification code to complete sign in.
-      </p>
-    </div>
-
-    <Input
-      label="Verification Code"
-      name="digits"
-      type="text"
-      required
-      placeholder="000000"
-      autocomplete="one-time-code"
-      minlength={6}
-      maxlength={6}
-      pattern="[0-9]{6}"
-      class="text-center text-2xl tracking-widest font-mono focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-      help="Enter the 6-digit code from your authenticator app"
-    />
-
-    <div class="text-center">
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        Codes refresh every 30 seconds. If your code doesn't work, wait for the next one.
-      </p>
-    </div>
-  </Fragment>
-</AuthLayout>
-
-<style>
-  input[name="digits"] {
-    letter-spacing: 0.5em;
-    font-variant-numeric: tabular-nums;
+    <script is:inline>
+(function () {
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme')
+    if (stored)
+      return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
-</style>
+  const theme = getTheme()
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  }
+})()
+</script>
+  </head>
+
+  <body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-sm">
+      <!-- Logo/Title -->
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
+          <Shield size={24} class="text-purple-700 dark:text-purple-300" />
+        </div>
+        <h1 class="text-xl font-bold">Two-Factor Authentication</h1>
+        <p class="text-sm mt-1" style="color: var(--text-secondary)">Enter your 6-digit code</p>
+      </div>
+
+      <!-- Verification Form -->
+      <Card>
+        <form action="/api/auth/mfa/validate" method="post" class="space-y-4">
+          <Input
+            name="digits"
+            type="text"
+            required
+            placeholder="000000"
+            autocomplete="one-time-code"
+            minlength={6}
+            maxlength={6}
+            pattern="[0-9]{6}"
+            class="text-center text-xl font-mono tracking-widest"
+            help="From your authenticator app"
+          />
+
+          <Button type="submit" class="w-full">
+            <Shield size={16} />
+            Verify & Sign In
+          </Button>
+        </form>
+
+        <div class="mt-4 pt-4 border-t" style="border-color: var(--border-color)">
+          <a href="/auth/login" class="flex items-center justify-center gap-1 text-xs" style="color: var(--text-secondary)">
+            <ArrowLeft size={12} />
+            Back to login
+          </a>
+        </div>
+      </Card>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-purple)"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10" style="background-color: var(--pastel-blue)"></div>
+    </div>
+  </body>
+</html>
 
 <script>
-// auto-focus the input and improve UX
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.querySelector('input[name="digits"]') as HTMLInputElement
   if (input) {
     input.focus()
 
-    // only allow numeric input
     input.addEventListener('input', (e) => {
       const target = e.target as HTMLInputElement
       target.value = target.value.replace(/\D/g, '')
 
-      // auto-submit when 6 digits are entered
       if (target.value.length === 6) {
         const form = target.closest('form')
         if (form) {
-          // small delay to show the complete code
           setTimeout(() => form.submit(), 300)
         }
       }
     })
 
-    // prevent pasting non-numeric content
     input.addEventListener('paste', (e) => {
       e.preventDefault()
       const paste = (e.clipboardData || (window as any).clipboardData).getData('text')
       const numericPaste = paste.replace(/\D/g, '').slice(0, 6)
       input.value = numericPaste
-
-      // trigger input event to handle auto-submit
       input.dispatchEvent(new Event('input', { bubbles: true }))
     })
   }

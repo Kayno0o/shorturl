@@ -2,7 +2,6 @@ import type { StringValue } from 'ms'
 import { getRepository } from '@kaynooo/ts-module'
 import { comparePasswords, hashPassword, stringToMsDuration } from '@kaynooo/utils'
 import { Elysia, redirect, t } from 'elysia'
-import { rateLimit } from 'elysia-rate-limit'
 import jwt from 'jsonwebtoken'
 import { authService, getUserFromJwt } from '../middleware/auth'
 import { User } from '../orm/entities/user'
@@ -85,11 +84,6 @@ const service = new AuthService()
 
 const authController = new Elysia({ prefix: '/auth' })
   .use(authService)
-  .use(rateLimit({
-    duration: 60_000,
-    max: 3,
-    scoping: 'scoped',
-  }))
   .get('/mfa/create', ({ cookie: { mfaToken } }) => {
     const maxAge = stringToMsDuration('3m')
     const expires = new Date(Date.now() + maxAge)

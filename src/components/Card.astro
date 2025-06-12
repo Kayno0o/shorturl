@@ -1,24 +1,28 @@
 ---
 export interface Props {
-  variant?: 'default' | 'hover' | 'interactive'
+  variant?: 'default' | 'hover' | 'interactive' | 'stat'
+  compact?: boolean
   class?: string
   [key: string]: any
 }
 
 const {
   variant = 'default',
+  compact = false,
   class: className = '',
   ...props
 } = Astro.props
 
-const baseClasses = 'bento-card'
+const baseClasses = 'dash-card'
 const variants = {
   default: '',
-  hover: 'bento-card-hover',
-  interactive: 'bento-card-interactive',
+  hover: 'dash-card-hover',
+  interactive: 'dash-card-interactive',
+  stat: 'stat-card',
 }
 
-const classes = `${baseClasses} ${variants[variant]} ${className}`
+const compactClass = compact ? 'p-3' : 'p-4'
+const classes = `${baseClasses} ${variants[variant]} ${compactClass} ${className}`
 ---
 
 <div class={classes} {...props}>

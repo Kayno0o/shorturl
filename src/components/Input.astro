@@ -17,7 +17,7 @@ const {
   ...props
 } = Astro.props
 
-const inputClasses = `input-field text-black dark:text-white ${error ? 'border-red-500 dark:text-white focus:border-red-500 focus:ring-red-500/20' : ''} ${className}`
+const inputClasses = `input-field ${error ? 'border-pink-400 focus:border-pink-400 focus:ring-pink-400/20' : ''} ${className}`
 const hasError = Boolean(error)
 const errorId = hasError ? `${id}-error` : undefined
 const helpId = help ? `${id}-help` : undefined
@@ -26,9 +26,9 @@ const describedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined
 
 <div>
   {label && (
-    <label for={id} class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+    <label for={id} class="label">
       {label}
-      {props.required && <span class="text-red-500" aria-label="required">*</span>}
+      {props.required && <span class="text-pink-500" aria-label="required">*</span>}
     </label>
   )}
 
@@ -41,13 +41,13 @@ const describedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined
   />
 
   {help && (
-    <p id={helpId} class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+    <p id={helpId} class="text-xs mt-1" style="color: var(--text-tertiary)">
       {help}
     </p>
   )}
 
   {error && (
-    <p id={errorId} class="text-xs text-red-600 dark:text-red-400 mt-1" role="alert">
+    <p id={errorId} class="text-xs text-pink-600 dark:text-pink-400 mt-1" role="alert">
       {error}
     </p>
   )}
