@@ -1,11 +1,20 @@
 import { getRepository } from '@kaynooo/ts-module'
 import { Elysia, redirect } from 'elysia'
+import maxmind from 'maxmind'
 import { authService } from './middleware/auth'
 import { initORM } from './orm'
 import { Link } from './orm/entities/link'
 import { User } from './orm/entities/user'
 import authRoutes from './routes/auth'
 import linkRoutes from './routes/link'
+
+const lookup = await maxmind.open('./node_modules/@ip-location-db/geolite2-country-mmdb/geolite2-country.mmdb')
+function getCountryCodeFromIP(ip: string) {
+  const result = lookup.get(ip)
+  if (result && 'country_code' in result)
+    return (result.country_code ?? null) as string | null
+  return null
+}
 
 const args = process.argv.slice(2)
 const portIndex = args.indexOf('--port')
@@ -40,7 +49,7 @@ const app = new Elysia()
   .group('/api', app => app
     .use(linkRoutes)
     .use(authRoutes))
-  .get('/:code', ({ params: { code } }) => {
+  .get('/:code', ({ params: { code }, headers, request }) => {
     const [namespace, ...codeParts] = code.split('-')
     code = codeParts.join('-')
 
@@ -55,6 +64,20 @@ const app = new Elysia()
 
     setImmediate(() => {
       link.clickCount++
+
+      const ip = headers['x-forwarded-for']
+        || headers['x-real-ip']
+        || request.headers.get('cf-connecting-ip')
+        || '127.0.0.1'
+      const country = getCountryCodeFromIP(ip)
+      if (country) {
+        const analytics = JSON.parse(link.analytics)
+        analytics.countries ||= {}
+        analytics.countries[country] ||= 0
+        analytics.countries[country]++
+        link.analytics = JSON.stringify(analytics)
+      }
+
       repo.update(link.id, link)
     })
 

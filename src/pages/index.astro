@@ -1,5 +1,5 @@
 ---
-import type { Link } from '../api/orm/entities/link'
+import type { Link, LinkAnalytics } from '../api/orm/entities/link'
 import { getUserFromJwt } from '../api/middleware/auth'
 import CreateLinkForm from '../components/CreateLinkForm.astro'
 import DashboardHeader from '../components/DashboardHeader.astro'
@@ -8,6 +8,7 @@ import HeroSection from '../components/HeroSection.astro'
 import LinksGrid from '../components/LinksGrid.astro'
 import QuickStats from '../components/QuickStats.astro'
 import Layout from '../layouts/Layout.astro'
+import { countryNames } from '../utils/countries'
 
 const cookies = Astro.cookies
 const user = getUserFromJwt(cookies.get('jwtToken')?.value)
@@ -27,6 +28,28 @@ catch (e) {
 }
 
 const totalClicks = links.reduce((sum, link) => sum + (link.clickCount || 0), 0)
+
+const countriesAggregate: Record<string, number> = {}
+
+for (const link of links) {
+  try {
+    const analytics: LinkAnalytics = JSON.parse(link.analytics || '{}')
+    if (analytics.countries) {
+      for (const [country, count] of Object.entries(analytics.countries))
+        countriesAggregate[country] = (countriesAggregate[country] || 0) + count
+    }
+  }
+  catch {
+  }
+}
+
+const topCountries = Object.entries(countriesAggregate)
+  .map(([code, count]) => ({
+    code,
+    name: countryNames[code] || code,
+    count,
+  }))
+  .sort((a, b) => b.count - a.count)
 ---
 
 <Layout title="URL Shortener">
@@ -40,7 +63,7 @@ const totalClicks = links.reduce((sum, link) => sum + (link.clickCount || 0), 0)
             <CreateLinkForm />
           </div>
 
-          <QuickStats linkCount={links.length} totalClicks={totalClicks} user={user} />
+          <QuickStats linkCount={links.length} totalClicks={totalClicks} user={user} topCountries={topCountries} />
         </div>
 
         <LinksGrid links={links} shortUrl={import.meta.env.SHORT_URL} user={user} />

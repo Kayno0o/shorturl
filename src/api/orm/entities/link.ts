@@ -14,6 +14,9 @@ export class Link extends AbstractEntity {
   @Column('int', { nullable: false, default: 0 })
   clickCount = 0
 
+  @Column('text', { nullable: false, default: '{}' })
+  analytics = '{}'
+
   constructor(data: { code: string, value: string, owner: number }) {
     super()
 
@@ -21,4 +24,8 @@ export class Link extends AbstractEntity {
     this.value = data.value
     this.owner = data.owner
   }
+}
+
+export interface LinkAnalytics {
+  countries?: Record<string, number>
 }

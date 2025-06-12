@@ -125,7 +125,7 @@ const authController = new Elysia({ prefix: '/auth' })
   .post('/mfa/validate', ({ cookie: { pendingMfaToken, jwtToken }, body: { digits } }) => {
     const user = getUserFromJwt(pendingMfaToken.value)
     if (!user)
-      return redirect('/login')
+      return redirect('/auth/login')
     if (!user.mfa_token)
       return redirect('/')
 

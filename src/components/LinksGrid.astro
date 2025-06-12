@@ -27,10 +27,8 @@ const { links, shortUrl, user } = Astro.props
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {links.map(link => (
         <LinkCard
-          code={link.code}
-          value={link.value}
+          link={link}
           shortUrl={shortUrl}
-          clickCount={link.clickCount}
           user={user}
         />
       ))}
