@@ -1,0 +1,283 @@
+---
+import { Globe, Link, MousePointerClick, Shield, TrendingUp, Zap } from '@lucide/astro'
+import Card from '../components/Card.astro'
+import DarkModeToggle from '../components/DarkModeToggle.astro'
+import '../styles/global.css'
+
+const isLoggedIn = Astro.cookies.get('jwtToken')?.value
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Create short, memorable links with detailed analytics. Fast, secure, and easy to use URL shortener." />
+    <title>Shortlink - Smart URL Shortener</title>
+
+    <script is:inline>
+(function () {
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme')
+    if (stored)
+      return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  const theme = getTheme()
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  }
+})()
+    </script>
+  </head>
+
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header class="dash-card border-0 border-b rounded-none">
+      <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--pastel-purple)">
+              <Link size={18} class="text-purple-700 dark:text-purple-300" />
+            </div>
+            <h1 class="text-xl font-bold gradient-text">Shortlink</h1>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <DarkModeToggle />
+            {isLoggedIn
+              ? (
+                <a href="/dashboard" class="btn btn-primary btn-sm">
+                  Dashboard
+                </a>
+              )
+              : (
+                <div class="flex items-center gap-2">
+                  <a href="/auth/login" class="btn btn-ghost btn-sm">
+                    Sign In
+                  </a>
+                  <a href="/auth/register" class="btn btn-primary btn-sm">
+                    Get Started
+                  </a>
+                </div>
+              )}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+      <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+          <span class="gradient-text">Shorten URLs</span><br />
+          <span style="color: var(--text-primary)">Track Everything</span>
+        </h2>
+
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary)">
+          Create short, memorable links with detailed analytics. Perfect for marketing campaigns, social media, and business use.
+        </p>
+
+        <div class="flex justify-center gap-3 mb-12">
+          {!isLoggedIn
+            ? (
+              <>
+                <a href="/auth/register" class="btn btn-primary">
+                  Get Started Free
+                </a>
+                <a href="/auth/login" class="btn btn-secondary">
+                  Sign In
+                </a>
+              </>
+            )
+            : (
+              <a href="/dashboard" class="btn btn-primary">
+                Go to Dashboard
+              </a>
+            )}
+        </div>
+
+        <!-- Demo/Preview -->
+        <Card class="max-w-md mx-auto">
+          <div class="text-left space-y-3">
+            <div class="text-xs font-medium" style="color: var(--text-secondary)">
+              Transform long URLs instantly
+            </div>
+            <div class="space-y-2">
+              <div class="text-xs" style="color: var(--text-tertiary)">From:</div>
+              <div class="code-inline text-xs break-all">
+                https://example.com/very-long-url-path/with-parameters?utm_source=social
+              </div>
+              <div class="text-xs" style="color: var(--text-tertiary)">To:</div>
+              <div class="code-inline text-xs text-purple-600 dark:text-purple-400">
+                short.ly/abc123
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-16 px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <h3 class="text-2xl md:text-3xl font-bold mb-4">
+            Everything you need to manage your links
+          </h3>
+          <p class="text-lg" style="color: var(--text-secondary)">
+            Powerful features designed for teams and individuals
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Feature 1 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
+              <Zap size={24} class="text-purple-700 dark:text-purple-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Lightning Fast</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Create and share short links instantly. No delays, no complications.
+            </p>
+          </Card>
+
+          <!-- Feature 2 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-blue)">
+              <TrendingUp size={24} class="text-blue-700 dark:text-blue-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Detailed Analytics</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Track clicks, countries, and performance metrics for every link.
+            </p>
+          </Card>
+
+          <!-- Feature 3 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-green)">
+              <Shield size={24} class="text-green-700 dark:text-green-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Secure & Private</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Two-factor authentication and secure link management.
+            </p>
+          </Card>
+
+          <!-- Feature 4 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-coral)">
+              <Link size={24} class="text-orange-700 dark:text-orange-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Custom Codes</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Create memorable short codes or let us generate them automatically.
+            </p>
+          </Card>
+
+          <!-- Feature 5 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-pink)">
+              <Globe size={24} class="text-pink-700 dark:text-pink-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Global Reach</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Track geographic data and understand your global audience.
+            </p>
+          </Card>
+
+          <!-- Feature 6 -->
+          <Card variant="hover" class="text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-yellow)">
+              <MousePointerClick size={24} class="text-yellow-700 dark:text-yellow-300" />
+            </div>
+            <h4 class="text-lg font-semibold mb-2">Click Tracking</h4>
+            <p class="text-sm" style="color: var(--text-secondary)">
+              Monitor link performance with real-time click tracking.
+            </p>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 px-4">
+      <div class="max-w-4xl mx-auto">
+        <Card class="text-center">
+          <h3 class="text-xl font-bold mb-8">Trusted by users worldwide</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div class="text-3xl font-bold gradient-text mb-2">10K+</div>
+              <div class="text-sm" style="color: var(--text-secondary)">Links Created</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold gradient-text mb-2">50K+</div>
+              <div class="text-sm" style="color: var(--text-secondary)">Clicks Tracked</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold gradient-text mb-2">99.9%</div>
+              <div class="text-sm" style="color: var(--text-secondary)">Uptime</div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <Card>
+          <h3 class="text-2xl md:text-3xl font-bold mb-4">
+            Ready to get started?
+          </h3>
+          <p class="text-lg mb-8" style="color: var(--text-secondary)">
+            Join thousands of users who trust Shortlink for their URL management needs.
+          </p>
+          <div class="flex justify-center gap-3">
+            {!isLoggedIn
+              ? (
+                <>
+                  <a href="/auth/register" class="btn btn-primary">
+                    Create Free Account
+                  </a>
+                  <a href="/auth/login" class="btn btn-secondary">
+                    Sign In
+                  </a>
+                </>
+              )
+              : (
+                <a href="/dashboard" class="btn btn-primary">
+                  Go to Dashboard
+                </a>
+              )}
+          </div>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t py-8 px-4" style="border-color: var(--border-color)">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-md flex items-center justify-center" style="background-color: var(--pastel-purple)">
+              <Link size={14} class="text-purple-700 dark:text-purple-300" />
+            </div>
+            <span class="font-semibold gradient-text">Shortlink</span>
+          </div>
+          <div class="text-xs" style="color: var(--text-tertiary)">
+            © 2025 Shortlink. Smart URL shortening service.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-5" style="background-color: var(--pastel-purple)"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-5" style="background-color: var(--pastel-blue)"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-3" style="background-color: var(--pastel-green)"></div>
+    </div>
+  </body>
+</html>
