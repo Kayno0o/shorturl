@@ -33,41 +33,59 @@
 /* CSS Variables for Pastel Color System */
 :root {
   /* Pastel Primary Colors */
-  --pastel-purple: #e9d5ff;
-  --pastel-blue: #dbeafe;
-  --pastel-green: #d1fae5;
-  --pastel-pink: #fce7f3;
-  --pastel-yellow: #fef3c7;
-  --pastel-coral: #fed7aa;
+  --pastel-purple: oklch(90.2% 0.06 306.7);
+  --pastel-blue: oklch(93.2% 0.032 255.6);
+  --pastel-green: oklch(95% 0.051 163.1);
+  --pastel-pink: oklch(94.8% 0.028 342.3);
+  --pastel-yellow: oklch(96.2% 0.058 95.6);
+  --pastel-coral: oklch(90.1% 0.073 70.7);
 
   /* Light Mode Colors */
-  --bg-primary: #fefefe;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --text-primary: #374151;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  --border-color: #e5e7eb;
-  --shadow-color: rgba(0, 0, 0, 0.05);
+  --bg-primary: oklch(99.7% 0 0);
+  --bg-secondary: oklch(98.5% 0.002 247.8);
+  --bg-tertiary: oklch(96.7% 0.003 264.5);
+  --text-primary: oklch(37.3% 0.031 259.7);
+  --text-secondary: oklch(55.1% 0.023 264.4);
+  --text-tertiary: oklch(71.4% 0.019 261.3);
+  --border-color: oklch(92.8% 0.006 264.5);
+  --shadow-color: oklch(0% 0 0 / 0.05);
 }
 
 .dark {
   /* Dark Mode - Muted Pastels */
-  --pastel-purple: #6b5b7b;
-  --pastel-blue: #4b6584;
-  --pastel-green: #4b7c6b;
-  --pastel-pink: #7b5b6b;
-  --pastel-yellow: #7c7b5b;
-  --pastel-coral: #7c6b5b;
+  --pastel-purple: oklch(49.9% 0.053 307.3);
+  --pastel-blue: oklch(49.9% 0.059 253.3);
+  --pastel-green: oklch(54.6% 0.06 170);
+  --pastel-pink: oklch(51% 0.048 347.5);
+  --pastel-yellow: oklch(57.5% 0.047 106.3);
+  --pastel-coral: oklch(53.9% 0.032 65.3);
 
-  --bg-primary: #1a1b23;
-  --bg-secondary: #1f2028;
-  --bg-tertiary: #25262f;
-  --text-primary: #e5e7eb;
-  --text-secondary: #9ca3af;
-  --text-tertiary: #6b7280;
-  --border-color: #374151;
-  --shadow-color: rgba(0, 0, 0, 0.3);
+  --bg-primary: oklch(22.5% 0.016 279.5);
+  --bg-secondary: oklch(24.6% 0.015 279.6);
+  --bg-tertiary: oklch(27.1% 0.017 280.2);
+  --text-primary: oklch(92.8% 0.006 264.5);
+  --text-secondary: oklch(71.4% 0.019 261.3);
+  --text-tertiary: oklch(55.1% 0.023 264.4);
+  --border-color: oklch(37.3% 0.031 259.7);
+  --shadow-color: oklch(0% 0 0 / 0.3);
+}
+
+@theme inline {
+  --color-pastel-purple: var(--pastel-purple);
+  --color-pastel-blue: var(--pastel-blue);
+  --color-pastel-green: var(--pastel-green);
+  --color-pastel-pink: var(--pastel-pink);
+  --color-pastel-yellow: var(--pastel-yellow);
+  --color-pastel-coral: var(--pastel-coral);
+
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border-color: var(--border-color);
+  --color-shadow-color: var(--shadow-color);
 }
 
 /* Smooth transitions */
@@ -77,12 +95,12 @@
 
 /* Base styles */
 body {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  @apply bg-bg-secondary;
+@apply text-text-primary;
 }
 
 @utility dash-card {
-  background-color: var(--bg-primary);
+  @apply bg-bg-primary;
   @apply rounded-lg border shadow-sm transition-all duration-200;
   border-color: var(--border-color);
   box-shadow: 0 1px 3px var(--shadow-color);
@@ -136,7 +154,7 @@ body {
 
   .stat-label {
     @apply text-sm;
-    color: var(--text-secondary);
+  @apply text-text-secondary;
   }
 
   /* Buttons - Compact & Pastel */
@@ -147,25 +165,25 @@ body {
   }
 
   .btn-primary {
-    background-color: var(--pastel-purple);
+    @apply bg-pastel-purple;
     @apply text-purple-900 dark:text-purple-100;
     @apply hover:brightness-95 hover:shadow-md active:shadow-sm;
   }
 
   .btn-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
+    @apply bg-bg-tertiary;
+  @apply text-text-primary;
     @apply hover:brightness-95;
   }
 
   .btn-ghost {
     @apply bg-transparent;
-    color: var(--text-secondary);
+  @apply text-text-secondary;
     @apply hover:bg-gray-100 dark:hover:bg-gray-800;
   }
 
   .btn-danger {
-    background-color: var(--pastel-pink);
+    @apply bg-pastel-pink;
     @apply text-pink-900 dark:text-pink-100;
     @apply hover:brightness-95;
   }
@@ -180,8 +198,8 @@ body {
 
   /* Form Inputs - Compact */
   .input-field {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
+    @apply bg-bg-tertiary;
+  @apply text-text-primary;
     border-color: var(--border-color);
     @apply w-full px-3 py-2 rounded-lg border text-sm transition-all;
     @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
@@ -194,7 +212,7 @@ body {
 
   /* Labels */
   .label {
-    color: var(--text-secondary);
+  @apply text-text-secondary;
     @apply block text-xs font-medium mb-1;
   }
 
@@ -210,15 +228,15 @@ body {
   }
 
   .status-success {
-    background-color: var(--pastel-green);
+    @apply bg-pastel-green;
   }
 
   .status-warning {
-    background-color: var(--pastel-yellow);
+    @apply bg-pastel-yellow;
   }
 
   .status-error {
-    background-color: var(--pastel-pink);
+    @apply bg-pastel-pink;
   }
 
   /* Compact table styles */
@@ -227,7 +245,7 @@ body {
   }
 
   .dash-table th {
-    color: var(--text-secondary);
+  @apply text-text-secondary;
     @apply text-left font-medium text-xs uppercase tracking-wider pb-2;
   }
 
@@ -237,33 +255,33 @@ body {
 
   /* Sidebar styles */
   .sidebar {
-    background-color: var(--bg-primary);
+    @apply bg-bg-primary;
     border-color: var(--border-color);
     @apply border-r h-full;
   }
 
   /* Code blocks */
   .code-inline {
-    background-color: var(--bg-tertiary);
+    @apply bg-bg-tertiary;
     @apply px-1.5 py-0.5 rounded text-xs font-mono;
   }
 
   /* Tooltips */
   .tooltip {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
+    @apply bg-bg-tertiary;
+  @apply text-text-primary;
     @apply absolute z-50 px-2 py-1 text-xs rounded shadow-lg;
   }
 
   /* Navigation tabs */
   .nav-tab {
-    color: var(--text-secondary);
+  @apply text-text-secondary;
     @apply px-3 py-2 text-sm font-medium rounded-lg transition-all;
     @apply hover:bg-gray-100 dark:hover:bg-gray-800;
   }
 
   .nav-tab.active {
-    background-color: var(--pastel-purple);
+    @apply bg-pastel-purple;
     @apply text-purple-900 dark:text-purple-100;
   }
 
