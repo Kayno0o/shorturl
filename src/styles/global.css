@@ -96,7 +96,7 @@
 /* Base styles */
 body {
   @apply bg-bg-secondary;
-@apply text-text-primary;
+  @apply text-text-primary;
 }
 
 @utility dash-card {
@@ -154,7 +154,7 @@ body {
 
   .stat-label {
     @apply text-sm;
-  @apply text-text-secondary;
+    @apply text-text-secondary;
   }
 
   /* Buttons - Compact & Pastel */
@@ -172,13 +172,13 @@ body {
 
   .btn-secondary {
     @apply bg-bg-tertiary;
-  @apply text-text-primary;
+    @apply text-text-primary;
     @apply hover:brightness-95;
   }
 
   .btn-ghost {
     @apply bg-transparent;
-  @apply text-text-secondary;
+    @apply text-text-secondary;
     @apply hover:bg-gray-100 dark:hover:bg-gray-800;
   }
 
@@ -199,7 +199,7 @@ body {
   /* Form Inputs - Compact */
   .input-field {
     @apply bg-bg-tertiary;
-  @apply text-text-primary;
+    @apply text-text-primary;
     border-color: var(--border-color);
     @apply w-full px-3 py-2 rounded-lg border text-sm transition-all;
     @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
@@ -212,7 +212,7 @@ body {
 
   /* Labels */
   .label {
-  @apply text-text-secondary;
+    @apply text-text-secondary;
     @apply block text-xs font-medium mb-1;
   }
 
@@ -245,7 +245,7 @@ body {
   }
 
   .dash-table th {
-  @apply text-text-secondary;
+    @apply text-text-secondary;
     @apply text-left font-medium text-xs uppercase tracking-wider pb-2;
   }
 
@@ -269,13 +269,13 @@ body {
   /* Tooltips */
   .tooltip {
     @apply bg-bg-tertiary;
-  @apply text-text-primary;
+    @apply text-text-primary;
     @apply absolute z-50 px-2 py-1 text-xs rounded shadow-lg;
   }
 
   /* Navigation tabs */
   .nav-tab {
-  @apply text-text-secondary;
+    @apply text-text-secondary;
     @apply px-3 py-2 text-sm font-medium rounded-lg transition-all;
     @apply hover:bg-gray-100 dark:hover:bg-gray-800;
   }

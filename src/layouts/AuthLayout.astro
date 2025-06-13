@@ -24,19 +24,19 @@ const {
     <title>{title} - Shortlink Dashboard</title>
 
     <script is:inline>
-(function () {
-  const getTheme = () => {
-    const stored = localStorage.getItem('theme')
-    if (stored)
-      return stored
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
-  const theme = getTheme()
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark')
-  }
-})()
-</script>
+      (function () {
+        const getTheme = () => {
+          const stored = localStorage.getItem('theme')
+          if (stored)
+            return stored
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        const theme = getTheme()
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
   </head>
 
   <body class="min-h-screen flex items-center justify-center p-4">

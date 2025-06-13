@@ -17,18 +17,18 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     <title>Shortlink - Smart URL Shortener</title>
 
     <script is:inline>
-(function () {
-  const getTheme = () => {
-    const stored = localStorage.getItem('theme')
-    if (stored)
-      return stored
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
-  const theme = getTheme()
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark')
-  }
-})()
+      (function () {
+        const getTheme = () => {
+          const stored = localStorage.getItem('theme')
+          if (stored)
+            return stored
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        const theme = getTheme()
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        }
+      })()
     </script>
   </head>
 

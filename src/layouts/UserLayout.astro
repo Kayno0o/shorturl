@@ -29,19 +29,19 @@ if (!user)
 
     <!-- Prevent flash of incorrect theme -->
     <script is:inline>
-(function () {
-  const getTheme = () => {
-    const stored = localStorage.getItem('theme')
-    if (stored)
-      return stored
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
-  const theme = getTheme()
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark')
-  }
-})()
-</script>
+      (function () {
+        const getTheme = () => {
+          const stored = localStorage.getItem('theme')
+          if (stored)
+            return stored
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        const theme = getTheme()
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
   </head>
 
   <body class="min-h-screen">
@@ -66,7 +66,7 @@ if (!user)
             <h1 class="text-lg font-semibold gradient-text">Shortlink</h1>
             <DarkModeToggle />
           </div>
-          <hr class="opacity-20" >
+          <hr class="opacity-20" />
           <div class="flex items-center justify-between w-full">
             <h2 class="text-lg font-semibold">Welcome back, {user.username}</h2>
             <a href="/api/auth/logout" class="btn btn-ghost btn-sm">
