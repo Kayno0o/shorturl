@@ -5,20 +5,26 @@ import { Moon, Sun } from '@lucide/astro'
 <button
   id="theme-toggle"
   type="button"
-  class="btn-icon dash-card dash-card-hover"
+  class="btn-icon dash-card-hover dash-card"
   aria-label="Toggle dark mode"
   title="Toggle dark mode"
 >
   <Sun
     id="theme-toggle-light-icon"
     size={16}
-    class="text-purple-600 dark:text-purple-400"
+    class={`
+      text-purple-600
+      dark:text-purple-400
+    `}
     aria-hidden="true"
   />
   <Moon
     id="theme-toggle-dark-icon"
     size={16}
-    class="text-purple-600 dark:text-purple-400 hidden"
+    class={`
+      hidden text-purple-600
+      dark:text-purple-400
+    `}
     aria-hidden="true"
   />
   <span class="sr-only">Toggle dark mode</span>

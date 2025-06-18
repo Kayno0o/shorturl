@@ -43,7 +43,7 @@ const countryEntries = Object.entries(analytics.countries || {})
 ---
 
 <UserLayout title={`Edit Link - ${code}`}>
-  <div class="max-w-2xl mx-auto space-y-4">
+  <div class="mx-auto max-w-2xl space-y-4">
     <!-- Header -->
     <Card class="p-4">
       <div class="flex items-center justify-between">
@@ -63,11 +63,19 @@ const countryEntries = Object.entries(analytics.countries || {})
       </div>
     </Card>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class={`
+      grid grid-cols-1 gap-4
+      md:grid-cols-3
+    `}
+    >
       <!-- Edit Form -->
       <div class="md:col-span-2">
         <Card>
-          <form action={`/api/link/update/${link.code}`} method="post" class="space-y-4">
+          <form
+            action={`/api/link/update/${link.code}`}
+            method="post"
+            class="space-y-4"
+          >
             <Input
               label="Short Code"
               name="code"
@@ -92,7 +100,11 @@ const countryEntries = Object.entries(analytics.countries || {})
                 <Save size={16} />
                 Save Changes
               </Button>
-              <form action={`/api/link/delete/${link.code}`} method="post" class="contents">
+              <form
+                action={`/api/link/delete/${link.code}`}
+                method="post"
+                class="contents"
+              >
                 <Button type="submit" variant="danger">
                   <Trash2 size={16} />
                   Delete
@@ -107,27 +119,39 @@ const countryEntries = Object.entries(analytics.countries || {})
       <div class="space-y-4">
         <!-- Quick Stats -->
         <Card>
-          <h3 class="text-sm font-semibold mb-3">Statistics</h3>
+          <h3 class="mb-3 text-sm font-semibold">Statistics</h3>
           <div class="space-y-3">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <MousePointerClick size={14} class="text-purple-600 dark:text-purple-400" />
+                <MousePointerClick
+                  size={14}
+                  class={`
+                    text-purple-600
+                    dark:text-purple-400
+                  `}
+                />
                 <span class="text-xs" style="color: var(--text-secondary)">Total Clicks</span>
               </div>
               <span class="text-lg font-bold">{link.clickCount}</span>
             </div>
             <div class="grid gap-1.5">
               <div class="flex items-center gap-2">
-                <Globe size={14} class="text-gray-600 dark:text-gray-400" />
+                <Globe
+                  size={14}
+                  class={`
+                    text-gray-600
+                    dark:text-gray-400
+                  `}
+                />
                 <span class="text-xs" style="color: var(--text-secondary)">Top Countries:</span>
               </div>
               {countryEntries.map(([countryCode, count]) => (
                 <div class="flex items-center justify-between">
                   <span class="text-xs">{countryNames[countryCode]}</span>
                   <div class="flex items-center gap-2">
-                    <div class="flex-1 h-1 w-16 rounded-full overflow-hidden" style="background-color: var(--bg-tertiary)">
+                    <div class="h-1 w-16 flex-1 overflow-hidden rounded-full" style="background-color: var(--bg-tertiary)">
                       <div
-                        class="h-full rounded-full w-full"
+                        class="h-full w-full rounded-full"
                         style="background-color: var(--pastel-purple)"
                       />
                     </div>
@@ -141,7 +165,7 @@ const countryEntries = Object.entries(analytics.countries || {})
 
         <!-- Link Preview -->
         <Card>
-          <h3 class="text-sm font-semibold mb-3">Preview</h3>
+          <h3 class="mb-3 text-sm font-semibold">Preview</h3>
           <div class="space-y-2">
             <div class="text-xs" style="color: var(--text-secondary)">Short URL</div>
             <code class="code-inline text-xs break-all">
@@ -151,7 +175,11 @@ const countryEntries = Object.entries(analytics.countries || {})
               href={link.value}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 hover:underline mt-2"
+              class={`
+                mt-2 flex items-center gap-1 text-xs text-purple-600
+                hover:underline
+                dark:text-purple-400
+              `}
             >
               <ExternalLink size={12} />
               Visit destination

@@ -34,14 +34,20 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
   <body class="min-h-screen">
     <!-- Header -->
-    <header class="dash-card border-0 border-b rounded-none">
-      <div class="max-w-6xl mx-auto px-4 py-4">
+    <header class="dash-card rounded-none border-0 border-b">
+      <div class="mx-auto max-w-6xl px-4 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--pastel-purple)">
-              <Link size={18} class="text-purple-700 dark:text-purple-300" />
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--pastel-purple)">
+              <Link
+                size={18}
+                class={`
+                  text-purple-700
+                  dark:text-purple-300
+                `}
+              />
             </div>
-            <h1 class="text-xl font-bold gradient-text">Shortlink</h1>
+            <h1 class="gradient-text text-xl font-bold">Shortlink</h1>
           </div>
 
           <div class="flex items-center gap-3">
@@ -68,18 +74,28 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </header>
 
     <!-- Hero Section -->
-    <section class="py-16 px-4">
-      <div class="max-w-6xl mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+    <section class="px-4 py-16">
+      <div class="mx-auto max-w-6xl text-center">
+        <h2 class={`
+          mb-6 text-4xl font-bold
+          md:text-5xl
+        `}
+        >
           <span class="gradient-text">Shorten URLs</span><br />
           <span style="color: var(--text-primary)">Track Everything</span>
         </h2>
 
-        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary)">
+        <p
+          class={`
+            mx-auto mb-8 max-w-2xl text-lg
+            md:text-xl
+          `}
+          style="color: var(--text-secondary)"
+        >
           A simple, fast URL shortener with click tracking. Perfect for sharing links on social media and tracking engagement.
         </p>
 
-        <div class="flex justify-center gap-3 mb-12">
+        <div class="mb-12 flex justify-center gap-3">
           {!isLoggedIn
             ? (
               <>
@@ -99,8 +115,8 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
         </div>
 
         <!-- Demo/Preview -->
-        <Card class="max-w-md mx-auto">
-          <div class="text-left space-y-3">
+        <Card class="mx-auto max-w-md">
+          <div class="space-y-3 text-left">
             <div class="text-xs font-medium" style="color: var(--text-secondary)">
               Transform long URLs instantly
             </div>
@@ -110,7 +126,11 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
                 https://example.com/very-long-url-path/with-parameters?utm_source=social
               </div>
               <div class="text-xs" style="color: var(--text-tertiary)">To:</div>
-              <div class="code-inline text-xs text-purple-600 dark:text-purple-400">
+              <div class={`
+                code-inline text-xs text-purple-600
+                dark:text-purple-400
+              `}
+              >
                 {import.meta.env.SHORT_URL}/abc123
               </div>
             </div>
@@ -120,10 +140,14 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </section>
 
     <!-- Features Grid -->
-    <section class="py-16 px-4">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <h3 class="text-2xl md:text-3xl font-bold mb-4">
+    <section class="px-4 py-16">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 text-center">
+          <h3 class={`
+            mb-4 text-2xl font-bold
+            md:text-3xl
+          `}
+          >
             Simple tools for link management
           </h3>
           <p class="text-lg" style="color: var(--text-secondary)">
@@ -131,13 +155,27 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class={`
+          grid grid-cols-1 gap-6
+          md:grid-cols-2
+          lg:grid-cols-3
+        `}
+        >
           <!-- Feature 1 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
-              <Zap size={24} class="text-purple-700 dark:text-purple-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-purple)"
+            >
+              <Zap
+                size={24}
+                class={`
+                  text-purple-700
+                  dark:text-purple-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Lightning Fast</h4>
+            <h4 class="mb-2 text-lg font-semibold">Lightning Fast</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Create and share short links instantly. No delays, no complications.
             </p>
@@ -145,10 +183,19 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
           <!-- Feature 2 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-blue)">
-              <TrendingUp size={24} class="text-blue-700 dark:text-blue-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-blue)"
+            >
+              <TrendingUp
+                size={24}
+                class={`
+                  text-blue-700
+                  dark:text-blue-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Detailed Analytics</h4>
+            <h4 class="mb-2 text-lg font-semibold">Detailed Analytics</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Track clicks, countries, and performance metrics for every link.
             </p>
@@ -156,10 +203,19 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
           <!-- Feature 3 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-green)">
-              <Shield size={24} class="text-green-700 dark:text-green-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-green)"
+            >
+              <Shield
+                size={24}
+                class={`
+                  text-green-700
+                  dark:text-green-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Secure & Private</h4>
+            <h4 class="mb-2 text-lg font-semibold">Secure & Private</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Two-factor authentication and secure link management.
             </p>
@@ -167,10 +223,19 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
           <!-- Feature 4 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-coral)">
-              <Link size={24} class="text-orange-700 dark:text-orange-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-coral)"
+            >
+              <Link
+                size={24}
+                class={`
+                  text-orange-700
+                  dark:text-orange-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Custom Codes</h4>
+            <h4 class="mb-2 text-lg font-semibold">Custom Codes</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Create memorable short codes or let us generate them automatically.
             </p>
@@ -178,10 +243,19 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
           <!-- Feature 5 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-pink)">
-              <Globe size={24} class="text-pink-700 dark:text-pink-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-pink)"
+            >
+              <Globe
+                size={24}
+                class={`
+                  text-pink-700
+                  dark:text-pink-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Global Reach</h4>
+            <h4 class="mb-2 text-lg font-semibold">Global Reach</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Track geographic data and understand your global audience.
             </p>
@@ -189,10 +263,19 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
 
           <!-- Feature 6 -->
           <Card variant="hover" class="text-center">
-            <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-yellow)">
-              <MousePointerClick size={24} class="text-yellow-700 dark:text-yellow-300" />
+            <div
+              class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+              style="background-color: var(--pastel-yellow)"
+            >
+              <MousePointerClick
+                size={24}
+                class={`
+                  text-yellow-700
+                  dark:text-yellow-300
+                `}
+              />
             </div>
-            <h4 class="text-lg font-semibold mb-2">Click Tracking</h4>
+            <h4 class="mb-2 text-lg font-semibold">Click Tracking</h4>
             <p class="text-sm" style="color: var(--text-secondary)">
               Monitor link performance with real-time click tracking.
             </p>
@@ -202,21 +285,25 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </section>
 
     <!-- Stats Section -->
-    <section class="py-16 px-4">
-      <div class="max-w-4xl mx-auto">
+    <section class="px-4 py-16">
+      <div class="mx-auto max-w-4xl">
         <Card class="text-center">
-          <h3 class="text-xl font-bold mb-8">Simple and reliable</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h3 class="mb-8 text-xl font-bold">Simple and reliable</h3>
+          <div class={`
+            grid grid-cols-1 gap-8
+            md:grid-cols-3
+          `}
+          >
             <div>
-              <div class="text-3xl font-bold gradient-text mb-2">Fast</div>
+              <div class="gradient-text mb-2 text-3xl font-bold">Fast</div>
               <div class="text-sm" style="color: var(--text-secondary)">Link Creation</div>
             </div>
             <div>
-              <div class="text-3xl font-bold gradient-text mb-2">Secure</div>
+              <div class="gradient-text mb-2 text-3xl font-bold">Secure</div>
               <div class="text-sm" style="color: var(--text-secondary)">2FA Protected</div>
             </div>
             <div>
-              <div class="text-3xl font-bold gradient-text mb-2">Private</div>
+              <div class="gradient-text mb-2 text-3xl font-bold">Private</div>
               <div class="text-sm" style="color: var(--text-secondary)">Your Data</div>
             </div>
           </div>
@@ -225,13 +312,17 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 px-4">
-      <div class="max-w-4xl mx-auto text-center">
+    <section class="px-4 py-16">
+      <div class="mx-auto max-w-4xl text-center">
         <Card>
-          <h3 class="text-2xl md:text-3xl font-bold mb-4">
+          <h3 class={`
+            mb-4 text-2xl font-bold
+            md:text-3xl
+          `}
+          >
             Give it a try
           </h3>
-          <p class="text-lg mb-8" style="color: var(--text-secondary)">
+          <p class="mb-8 text-lg" style="color: var(--text-secondary)">
             Start shortening your links and tracking clicks in seconds.
           </p>
           <div class="flex justify-center gap-3">
@@ -257,14 +348,24 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </section>
 
     <!-- Footer -->
-    <footer class="border-t py-8 px-4" style="border-color: var(--border-color)">
-      <div class="max-w-6xl mx-auto">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+    <footer class="border-t px-4 py-8" style="border-color: var(--border-color)">
+      <div class="mx-auto max-w-6xl">
+        <div class={`
+          flex flex-col items-center justify-between gap-4
+          md:flex-row
+        `}
+        >
           <div class="flex items-center gap-2">
-            <div class="w-6 h-6 rounded-md flex items-center justify-center" style="background-color: var(--pastel-purple)">
-              <Link size={14} class="text-purple-700 dark:text-purple-300" />
+            <div class="flex h-6 w-6 items-center justify-center rounded-md" style="background-color: var(--pastel-purple)">
+              <Link
+                size={14}
+                class={`
+                  text-purple-700
+                  dark:text-purple-300
+                `}
+              />
             </div>
-            <span class="font-semibold gradient-text">Shortlink</span>
+            <span class="gradient-text font-semibold">Shortlink</span>
           </div>
           <div class="text-xs" style="color: var(--text-tertiary)">
             © 2025 Shortlink. Smart URL shortening service.
@@ -274,10 +375,13 @@ const isLoggedIn = Astro.cookies.get('jwtToken')?.value
     </footer>
 
     <!-- Decorative Elements -->
-    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-5" style="background-color: var(--pastel-purple)"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-5" style="background-color: var(--pastel-blue)"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-3" style="background-color: var(--pastel-green)"></div>
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 -right-40 h-80 w-80 rounded-full opacity-5" style="background-color: var(--pastel-purple)"></div>
+      <div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full opacity-5" style="background-color: var(--pastel-blue)"></div>
+      <div
+        class="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-full opacity-3"
+        style="background-color: var(--pastel-green)"
+      ></div>
     </div>
   </body>
 </html>

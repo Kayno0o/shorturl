@@ -38,16 +38,23 @@ const describedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined
     aria-invalid={hasError}
     aria-describedby={describedBy}
     {...props}
-  />
+    >
 
   {help && (
-    <p id={helpId} class="text-xs mt-1" style="color: var(--text-tertiary)">
+    <p id={helpId} class="mt-1 text-xs" style="color: var(--text-tertiary)">
       {help}
     </p>
   )}
 
   {error && (
-    <p id={errorId} class="text-xs text-pink-600 dark:text-pink-400 mt-1" role="alert">
+    <p
+      id={errorId}
+      class={`
+        mt-1 text-xs text-pink-600
+        dark:text-pink-400
+      `}
+      role="alert"
+    >
       {error}
     </p>
   )}

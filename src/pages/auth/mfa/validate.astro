@@ -12,11 +12,20 @@ import AuthLayout from '../../../layouts/AuthLayout.astro'
   showBackHome={false}
 >
   <div slot="header">
-    <div class="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
-      <Shield size={24} class="text-purple-700 dark:text-purple-300" />
+    <div
+      class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl"
+      style="background-color: var(--pastel-purple)"
+    >
+      <Shield
+        size={24}
+        class={`
+          text-purple-700
+          dark:text-purple-300
+        `}
+      />
     </div>
     <h1 class="text-xl font-bold">Two-Factor Authentication</h1>
-    <p class="text-sm mt-1" style="color: var(--text-secondary)">Enter your 6-digit code</p>
+    <p class="mt-1 text-sm" style="color: var(--text-secondary)">Enter your 6-digit code</p>
   </div>
 
   <!-- Verification Form -->
@@ -31,7 +40,7 @@ import AuthLayout from '../../../layouts/AuthLayout.astro'
         minlength={6}
         maxlength={6}
         pattern="[0-9]{6}"
-        class="text-center text-xl font-mono tracking-widest"
+        class="text-center font-mono text-xl tracking-widest"
         help="From your authenticator app"
       />
 
@@ -41,8 +50,12 @@ import AuthLayout from '../../../layouts/AuthLayout.astro'
       </Button>
     </form>
 
-    <div class="mt-4 pt-4 border-t" style="border-color: var(--border-color)">
-      <a href="/auth/login" class="flex items-center justify-center gap-1 text-xs" style="color: var(--text-secondary)">
+    <div class="mt-4 border-t pt-4" style="border-color: var(--border-color)">
+      <a
+        href="/auth/login"
+        class="flex items-center justify-center gap-1 text-xs"
+        style="color: var(--text-secondary)"
+      >
         <ArrowLeft size={12} />
         Back to login
       </a>

@@ -16,34 +16,48 @@ const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mf
 ---
 
 <UserLayout title="Enable 2FA">
-  <div class="max-w-md mx-auto space-y-4">
+  <div class="mx-auto max-w-md space-y-4">
     <!-- Header -->
     <Card class="text-center">
-      <div class="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style="background-color: var(--pastel-purple)">
-        <Shield size={24} class="text-purple-700 dark:text-purple-300" />
+      <div
+        class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl"
+        style="background-color: var(--pastel-purple)"
+      >
+        <Shield
+          size={24}
+          class={`
+            text-purple-700
+            dark:text-purple-300
+          `}
+        />
       </div>
       <h1 class="text-xl font-bold">Enable Two-Factor Authentication</h1>
-      <p class="text-sm mt-1" style="color: var(--text-secondary)">Secure your account with 2FA</p>
+      <p class="mt-1 text-sm" style="color: var(--text-secondary)">Secure your account with 2FA</p>
     </Card>
 
     <!-- QR Code -->
     <Card>
-      <h2 class="text-sm font-semibold mb-3">1. Scan QR Code</h2>
-      <p class="text-xs mb-4" style="color: var(--text-secondary)">
+      <h2 class="mb-3 text-sm font-semibold">1. Scan QR Code</h2>
+      <p class="mb-4 text-xs" style="color: var(--text-secondary)">
         Use Google Authenticator, Authy, or similar app
       </p>
 
-      <div class="flex justify-center mb-4">
-        <div class="bg-white p-3 rounded-lg shadow-sm">
+      <div class="mb-4 flex justify-center">
+        <div class="rounded-lg bg-white p-3 shadow-sm">
           <canvas data-url={url} id="qrcode"></canvas>
         </div>
       </div>
 
       <details class="text-xs">
-        <summary class="cursor-pointer text-purple-600 dark:text-purple-400 hover:underline">
+        <summary class={`
+          cursor-pointer text-purple-600
+          hover:underline
+          dark:text-purple-400
+        `}
+        >
           Can't scan? Enter manually
         </summary>
-        <div class="mt-2 p-2 rounded" style="background-color: var(--bg-tertiary)">
+        <div class="mt-2 rounded p-2" style="background-color: var(--bg-tertiary)">
           <code class="text-xs break-all">{cookies.get('mfaToken')!.value}</code>
         </div>
       </details>
@@ -51,7 +65,7 @@ const url = getMfaUrl(user.username, import.meta.env.MFA_ISSUER, cookies.get('mf
 
     <!-- Verification -->
     <Card>
-      <h2 class="text-sm font-semibold mb-3">2. Verify Setup</h2>
+      <h2 class="mb-3 text-sm font-semibold">2. Verify Setup</h2>
       <form action="/api/auth/mfa/enable" method="post" class="space-y-3">
         <Input
           name="digits"

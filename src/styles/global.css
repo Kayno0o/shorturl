@@ -106,7 +106,7 @@ body {
   box-shadow: 0 1px 3px var(--shadow-color);
 }
 
-@layer utilities {
+@layer components {
   /* Skip link */
   .skip-link {
     @apply absolute left-4 top-4 -translate-y-16 focus:translate-y-0;

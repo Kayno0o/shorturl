@@ -22,7 +22,12 @@ const variants = {
 }
 
 const compactClass = compact ? 'p-3' : 'p-4'
-const classes = `${baseClasses} ${variants[variant]} ${compactClass} ${className}`
+const classes = `
+  ${baseClasses}
+  ${variants[variant]}
+  ${compactClass}
+  ${className}
+`
 ---
 
 <div class={classes} {...props}>

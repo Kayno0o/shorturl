@@ -21,7 +21,12 @@ const baseClasses = 'btn'
 const variantClasses = `btn-${variant}`
 const sizeClasses = size === 'sm' ? 'btn-sm' : ''
 
-const classes = `${baseClasses} ${variantClasses} ${sizeClasses} ${className}`
+const classes = `
+  ${baseClasses}
+  ${variantClasses}
+  ${sizeClasses}
+  ${className}
+`
 ---
 
 <button
